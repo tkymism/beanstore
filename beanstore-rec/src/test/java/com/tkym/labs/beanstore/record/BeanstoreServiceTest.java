@@ -56,7 +56,7 @@ public class BeanstoreServiceTest {
 	@BeforeClass
 	public static void setupClass() throws Exception{
 		service = 
-				new BeanstoreServiceFactoryByRecord(new SqliteRecordstoreServiceFactory()).create();
+				new BeanstoreServiceRecordFactory(new SqliteRecordstoreServiceFactory()).create();
 		service.create(PersonMeta.get());
 		service.create(AccountMeta.get());
 		service.create(BillMeta.get());
