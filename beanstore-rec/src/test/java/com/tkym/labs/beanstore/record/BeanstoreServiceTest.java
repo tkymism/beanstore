@@ -8,6 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.api.Beanstore;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
@@ -17,14 +24,7 @@ import com.tkym.labs.beanstore.bean.Bill;
 import com.tkym.labs.beanstore.bean.BillMeta;
 import com.tkym.labs.beanstore.bean.Person;
 import com.tkym.labs.beanstore.bean.PersonMeta;
-import com.tkym.labs.beanmeta.Key;
-import com.tkym.labs.record.SqliteRecordstoreServiceFactory;
-
-import org.hamcrest.CoreMatchers;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import com.tkym.labs.record.SqliteRecordstoreRepository;
 
 public class BeanstoreServiceTest {
 	private static BeanstoreServiceRecord service; 
@@ -55,8 +55,8 @@ public class BeanstoreServiceTest {
 	
 	@BeforeClass
 	public static void setupClass() throws Exception{
-		service = 
-				new BeanstoreServiceRecordFactory(new SqliteRecordstoreServiceFactory()).create();
+		SqliteRecordstoreRepository.asMemory();
+		service = new BeanstoreServiceRecordFactory(SqliteRecordstoreRepository.asMemory()).create();
 		service.create(PersonMeta.get());
 		service.create(AccountMeta.get());
 		service.create(BillMeta.get());

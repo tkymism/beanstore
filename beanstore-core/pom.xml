@@ -4,7 +4,6 @@
 
 	<groupId>com.tkym.labs</groupId>
 	<artifactId>beanstore-core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>beanstore-core</name>
@@ -15,11 +14,6 @@
 		<version>1.0</version>
 	</parent>
 	<dependencies>
-		<dependency>
-			<groupId>jp.tkym.labs</groupId>
-			<artifactId>beanstore-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>com.tkym.labs</groupId>
 			<artifactId>beanstore-api</artifactId>

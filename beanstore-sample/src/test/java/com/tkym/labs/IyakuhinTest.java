@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.tkym.labs.CsvDataProvider;
-import com.tkym.labs.beanstore.record.BeanstoreServiceRecordFactory;
-import com.tkym.labs.beanstore.record.BeanstoreServiceRecord;
-import com.tkym.labs.record.RecordstoreServiceFactory;
-import com.tkym.labs.record.SqliteRecordstoreServiceFactory;
-import com.tkym.labs.uke.Iyakuhin;
-
-import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanmeta.Key;
+import com.tkym.labs.beanstore.api.BeanstoreException;
+import com.tkym.labs.beanstore.record.BeanstoreServiceRecord;
+import com.tkym.labs.beanstore.record.BeanstoreServiceRecordFactory;
+import com.tkym.labs.record.SqliteRecordstoreRepository;
+import com.tkym.labs.uke.Iyakuhin;
 import com.tkym.labs.uke.IyakuhinMeta;
 
 public class IyakuhinTest {
@@ -20,9 +17,7 @@ public class IyakuhinTest {
 	private static IyakuhinMeta IYAKUHIN = IyakuhinMeta.get();
 //	@BeforeClass
 	public static void setupClass() throws Exception{
-		RecordstoreServiceFactory factory = new SqliteRecordstoreServiceFactory(IyakuhinTest.class.getResource("csv.db"));
-		service = new BeanstoreServiceRecordFactory(factory).create();
-//		service.create(IYAKUHIN);
+		service = new BeanstoreServiceRecordFactory(SqliteRecordstoreRepository.asMemory()).create();
 	}
 	
 //	@AfterClass

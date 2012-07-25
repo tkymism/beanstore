@@ -7,8 +7,6 @@ import static org.junit.Assert.assertThat;
 import java.io.InputStream;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import com.tkym.labs.beanmeta.csv.CsvBeanConverter;
