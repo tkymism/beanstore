@@ -6,9 +6,9 @@ import com.tkym.labs.beanstore.api.BeanstoreServiceFactory;
 
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
-public class BeanstoreServiceGaeFactory implements BeanstoreServiceFactory<BeanstoreService>{
+public class BeanstoreServiceGaeFactory implements BeanstoreServiceFactory{
 	@Override
-	public BeanstoreService create() throws BeanstoreException {
-    	return new BeanstoreServiceGae(DatastoreServiceFactory.getDatastoreService());
+	public BeanstoreService<Void,Void> create() throws BeanstoreException {
+    	return new BeanstoreServiceGae<Void,Void>(DatastoreServiceFactory.getDatastoreService());
 	}
 }

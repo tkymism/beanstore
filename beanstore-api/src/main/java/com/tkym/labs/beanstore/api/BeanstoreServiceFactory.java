@@ -1,5 +1,5 @@
 package com.tkym.labs.beanstore.api;
 
-public interface BeanstoreServiceFactory<S extends BeanstoreService> {
-	public S create() throws BeanstoreException;
+public interface BeanstoreServiceFactory {
+	public BeanstoreService<Void,Void> create() throws BeanstoreException;
 }

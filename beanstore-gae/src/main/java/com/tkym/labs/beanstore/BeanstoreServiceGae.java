@@ -5,12 +5,12 @@ import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.api.BeanQuery;
 
-class BeanstoreServiceGae extends AbstractBeanstoreService {
+class BeanstoreServiceGae<PB,PK> extends AbstractBeanstoreService<PB,PK> {
 	private DatastoreService datastoreService;
 	
-	BeanstoreServiceGae(AbstractBeanstoreService rootService, Key<?,?> parent){
+	BeanstoreServiceGae(AbstractBeanstoreService<?,?> rootService, Key<PB,PK> parent){
 		super(rootService, parent);
-		this.datastoreService = ((BeanstoreServiceGae)rootService).getDatastoreService();
+		this.datastoreService = ((BeanstoreServiceGae<?,?>)rootService).getDatastoreService();
 	}
 	
 	BeanstoreServiceGae(DatastoreService datastoreService){
@@ -28,7 +28,7 @@ class BeanstoreServiceGae extends AbstractBeanstoreService {
 
 	@Override
 	protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(
-			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+			BeanMeta<BT, KT> beanMeta, Key<PB,PK> parent) {
 		return new BeanstoreGae<BT, KT>(super.getRoot(), beanMeta, parent, datastoreService);
 	}
 }

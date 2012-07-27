@@ -7,7 +7,7 @@ import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.record.RecordstoreService;
 
-public class BeanstoreServiceRecord extends AbstractBeanstoreService{
+public class BeanstoreServiceRecord<PB, PK> extends AbstractBeanstoreService<PB, PK>{
 	private final RecordstoreService recordstoreService;
 	
 	BeanstoreServiceRecord(RecordstoreService recordstoreService){
@@ -15,9 +15,9 @@ public class BeanstoreServiceRecord extends AbstractBeanstoreService{
 		this.recordstoreService = recordstoreService;
 	}
 	
-	BeanstoreServiceRecord(AbstractBeanstoreService root, Key<?, ?> parent){
+	BeanstoreServiceRecord(AbstractBeanstoreService<?, ?> root, Key<PB, PK> parent){
 		super(root, parent);
-		this.recordstoreService = ((BeanstoreServiceRecord)root).recordstoreService;
+		this.recordstoreService = ((BeanstoreServiceRecord<?,?>)root).recordstoreService;
 	}
 	
 	RecordstoreService getRecordstoreService(){
@@ -25,7 +25,7 @@ public class BeanstoreServiceRecord extends AbstractBeanstoreService{
 	}
 	
 	@Override
-	protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+	protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(BeanMeta<BT, KT> beanMeta, Key<PB, PK> parent) {
 		return new BeanstoreRecord<BT, KT>(getRoot(), beanMeta, parent);
 	}
 	

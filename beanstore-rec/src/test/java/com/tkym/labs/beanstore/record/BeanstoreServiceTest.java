@@ -27,7 +27,7 @@ import com.tkym.labs.beanmeta.beans.PersonMeta;
 import com.tkym.labs.record.SqliteRecordstoreRepository;
 
 public class BeanstoreServiceTest {
-	private static BeanstoreServiceRecord service; 
+	private static BeanstoreServiceRecord<Void,Void> service; 
 	private static PersonMeta PERSON = PersonMeta.get();
 	private static AccountMeta ACCOUNT = AccountMeta.get();
 	private static BillMeta BILL = BillMeta.get();
@@ -120,13 +120,13 @@ public class BeanstoreServiceTest {
 		Iterator<Key<Person, Long>> pIte = 
 				service.query(PERSON).key().asIterator();
 		while(pIte.hasNext()){
-			BeanstoreService personService = 
+			BeanstoreService<Person,Long> personService = 
 					service.store(PERSON).is(pIte.next().value());
 			List<Key<Account, String>> alist = 
 					personService.query(ACCOUNT).key().asList();
 			assertThat(alist.size(), is(10));
 			for(Key<Account, String> akey : alist){
-				BeanstoreService accountService = 
+				BeanstoreService<Account,String> accountService = 
 					personService.store(ACCOUNT).is(akey.value());
 				List<Key<Bill, Integer>> blist = 
 					accountService.query(BILL).key().asList();

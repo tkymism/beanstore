@@ -32,6 +32,8 @@ public class BeanstoreGaeQueryTest {
 
     @Before
     public void setUp() {
+    	PersonMeta.get().name.setIndexed(true);
+    	AccountMeta.get().address.setIndexed(true);
         helper.setUp();
     }
 
@@ -57,7 +59,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testBeanstoreServiceCase001() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(10L));
     	service.getTransaction().commit();
@@ -81,7 +83,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testBeanstoreServiceCase002() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(10L));
     	service.getTransaction().commit();
@@ -101,7 +103,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testBeanstoreServiceCase003() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(10L));
     	service.getTransaction().commit();
@@ -121,7 +123,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testBeanstoreServiceCase004() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(9L));
     	service.getTransaction().commit();
@@ -141,7 +143,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testBeanstoreServiceCase101() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	AccountMeta ACCOUNT = AccountMeta.get();
     	service.store(PERSON).put(person(1L));
@@ -167,7 +169,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testBeanstoreServiceCase102() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	AccountMeta ACCOUNT = AccountMeta.get();
     	service.store(PERSON).put(person(3L));
@@ -185,7 +187,7 @@ public class BeanstoreGaeQueryTest {
     @Test
     public void testERRORRRRR_BeanstoreServiceCase103() throws BeanstoreException{
     	BeanstoreServiceGaeFactory factory = new BeanstoreServiceGaeFactory();
-    	BeanstoreService service = factory.create();
+    	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	AccountMeta ACCOUNT = AccountMeta.get();
     	
