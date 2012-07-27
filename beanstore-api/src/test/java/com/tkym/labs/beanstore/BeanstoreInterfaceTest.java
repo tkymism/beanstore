@@ -10,10 +10,10 @@ import org.junit.Test;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.beanstore.api.BeanstoreServiceFactory;
-import com.tkym.labs.beanstore.bean.Account;
-import com.tkym.labs.beanstore.bean.AccountMeta;
-import com.tkym.labs.beanstore.bean.Person;
-import com.tkym.labs.beanstore.bean.PersonMeta;
+import com.tkym.labs.beanmeta.beans.Account;
+import com.tkym.labs.beanmeta.beans.AccountMeta;
+import com.tkym.labs.beanmeta.beans.Person;
+import com.tkym.labs.beanmeta.beans.PersonMeta;
 import com.tkym.labs.beanmeta.Key;
 
 public class BeanstoreInterfaceTest {

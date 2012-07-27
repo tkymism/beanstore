@@ -16,5 +16,11 @@
 			<artifactId>beanmeta-core</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tkym.labs</groupId>
+			<artifactId>beanmeta-test</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

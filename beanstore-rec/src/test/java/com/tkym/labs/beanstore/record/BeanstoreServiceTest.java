@@ -18,12 +18,12 @@ import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.api.Beanstore;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
-import com.tkym.labs.beanstore.bean.Account;
-import com.tkym.labs.beanstore.bean.AccountMeta;
-import com.tkym.labs.beanstore.bean.Bill;
-import com.tkym.labs.beanstore.bean.BillMeta;
-import com.tkym.labs.beanstore.bean.Person;
-import com.tkym.labs.beanstore.bean.PersonMeta;
+import com.tkym.labs.beanmeta.beans.Account;
+import com.tkym.labs.beanmeta.beans.AccountMeta;
+import com.tkym.labs.beanmeta.beans.Bill;
+import com.tkym.labs.beanmeta.beans.BillMeta;
+import com.tkym.labs.beanmeta.beans.Person;
+import com.tkym.labs.beanmeta.beans.PersonMeta;
 import com.tkym.labs.record.SqliteRecordstoreRepository;
 
 public class BeanstoreServiceTest {
