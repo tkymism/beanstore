@@ -15,9 +15,9 @@ public class BeanstoreServiceRecord<PB, PK> extends AbstractBeanstoreService<PB,
 		this.recordstoreService = recordstoreService;
 	}
 	
-	BeanstoreServiceRecord(AbstractBeanstoreService<?, ?> root, Key<PB, PK> parent){
+	BeanstoreServiceRecord(AbstractBeanstoreService<Void, Void> root, Key<PB, PK> parent){
 		super(root, parent);
-		this.recordstoreService = ((BeanstoreServiceRecord<?,?>)root).recordstoreService;
+		this.recordstoreService = ((BeanstoreServiceRecord<Void,Void>)root).recordstoreService;
 	}
 	
 	RecordstoreService getRecordstoreService(){

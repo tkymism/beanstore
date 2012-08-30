@@ -1,29 +1,34 @@
 package com.tkym.labs.beanstore.record;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tkym.labs.beanmeta.Key;
-import com.tkym.labs.beanstore.api.Beanstore;
-import com.tkym.labs.beanstore.api.BeanstoreException;
-import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.beanmeta.beans.Account;
 import com.tkym.labs.beanmeta.beans.AccountMeta;
 import com.tkym.labs.beanmeta.beans.Bill;
 import com.tkym.labs.beanmeta.beans.BillMeta;
 import com.tkym.labs.beanmeta.beans.Person;
 import com.tkym.labs.beanmeta.beans.PersonMeta;
+import com.tkym.labs.beanstore.api.Beanstore;
+import com.tkym.labs.beanstore.api.BeanstoreException;
+import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.record.SqliteRecordstoreRepository;
 
 public class BeanstoreServiceTest {
@@ -55,8 +60,7 @@ public class BeanstoreServiceTest {
 	
 	@BeforeClass
 	public static void setupClass() throws Exception{
-		SqliteRecordstoreRepository.asMemory();
-		service = new BeanstoreServiceRecordFactory(SqliteRecordstoreRepository.asMemory()).create();
+		service = new BeanstoreServiceRecordFactory(SqliteRecordstoreRepository.inMemory()).create();
 		service.create(PersonMeta.get());
 		service.create(AccountMeta.get());
 		service.create(BillMeta.get());
@@ -141,24 +145,61 @@ public class BeanstoreServiceTest {
 				service.query(BILL).
 				filter(BILL.no).greaterThan(1).
 				filter(BILL.no).lessThan(4).
-				key().asIterator();
+				key().
+				asIterator();
 		
 		Map<Long, Integer> countMap = new HashMap<Long, Integer>();
 		for(long id = 0; id<10; id++) countMap.put(id, 0);
 		while(bIte.hasNext()){
 			Key<Bill, Integer> bkey = bIte.next();
-			Assert.assertTrue(bkey.value()<4);
-			Assert.assertTrue(bkey.value()>1);
-			Assert.assertNotNull(bkey.getParent());
+			assertTrue(bkey.value()<4);
+			assertTrue(bkey.value()>1);
+			assertNotNull(bkey.getParent());
 			@SuppressWarnings("unchecked")
 			Key<Account, String> akey = (Key<Account, String>)bkey.getParent();
-			Assert.assertNotNull(akey.getParent());
+			assertNotNull(akey.getParent());
 			@SuppressWarnings("unchecked")
 			Key<Person, Long> pkey = (Key<Person, Long>)akey.getParent();
 			int count = countMap.get(pkey.value())+1;
 			countMap.put(pkey.value(), count);
 		}
 		for (long id : countMap.keySet())
-			Assert.assertThat(countMap.get(id), CoreMatchers.is(20));
+			assertThat(countMap.get(id), is(20));
+	}
+	
+	public void testERROR_CASE_UNSUPPORT_THREAD_SAFE() throws InterruptedException, ExecutionException{
+		List<Future<Void>> futures = new ArrayList<Future<Void>>();
+		for(int i=0; i<100; i++)
+			futures.add(Executors.newCachedThreadPool().submit(new Callable<Void>() {
+				@Override
+				public Void call() throws Exception {
+					Iterator<Key<Bill, Integer>> bIte = 
+							service.query(BILL).
+							filter(BILL.no).greaterThan(1).
+							filter(BILL.no).lessThan(4).
+							key().
+							asIterator();
+					Map<Long, Integer> countMap = new HashMap<Long, Integer>();
+					for(long id = 0; id<10; id++) countMap.put(id, 0);
+					while(bIte.hasNext()){
+						Key<Bill, Integer> bkey = bIte.next();
+						assertTrue(bkey.value()<4);
+						assertTrue(bkey.value()>1);
+						assertNotNull(bkey.getParent());
+						@SuppressWarnings("unchecked")
+						Key<Account, String> akey = (Key<Account, String>)bkey.getParent();
+						assertNotNull(akey.getParent());
+						@SuppressWarnings("unchecked")
+						Key<Person, Long> pkey = (Key<Person, Long>)akey.getParent();
+						int count = countMap.get(pkey.value())+1;
+						countMap.put(pkey.value(), count);
+					}
+					for (long id : countMap.keySet())
+						assertThat(countMap.get(id), is(20));
+					return null;
+				}
+			}));
+		for(Future<Void> f : futures)
+			f.get();
 	}
 }

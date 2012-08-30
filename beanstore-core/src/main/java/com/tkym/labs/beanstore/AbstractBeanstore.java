@@ -10,13 +10,13 @@ import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
 
 public abstract class AbstractBeanstore<BT, KT> implements Beanstore<BT, KT>{
-	protected final AbstractBeanstoreService<?,?> beanstoreServiceRoot;
+	protected final AbstractBeanstoreService<Void,Void> beanstoreServiceRoot;
 	protected final BeanMeta<BT, KT> beanMeta;
 	protected final Key<?,?> parent;
 	private final Map<KT, BeanstoreService<BT, KT>> childServiceMap = 
 			new ConcurrentHashMap<KT, BeanstoreService<BT, KT>>();
 	
-	protected AbstractBeanstore(AbstractBeanstoreService<?,?> rootService, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+	protected AbstractBeanstore(AbstractBeanstoreService<Void,Void> rootService, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		this.beanstoreServiceRoot = rootService;
 		this.beanMeta = beanMeta;
 		this.parent = parent;
@@ -32,7 +32,7 @@ public abstract class AbstractBeanstore<BT, KT> implements Beanstore<BT, KT>{
 		return service;
 	}
 	
-	protected abstract AbstractBeanstoreService<BT, KT> createChildService(AbstractBeanstoreService<?, ?> beanstoreServiceRoot, Key<BT, KT> key);
+	protected abstract AbstractBeanstoreService<BT, KT> createChildService(AbstractBeanstoreService<Void, Void> beanstoreServiceRoot, Key<BT, KT> key);
 	
 	@Override
 	public Key<BT, KT> key(KT key) {

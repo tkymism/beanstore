@@ -16,7 +16,7 @@ class BeanstoreRecord<BT, KT> extends AbstractBeanstore<BT, KT>{
 	private final RecordKeyBuilder keyBuilder;
 	private final BeanMetaResolver<BT,KT> beanMetaResolver;
 
-	BeanstoreRecord(AbstractBeanstoreService<?,?> root, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent){
+	BeanstoreRecord(AbstractBeanstoreService<Void,Void> root, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent){
 		super(root, beanMeta, parent);
 		this.recordstoreService = ((BeanstoreServiceRecord<?,?>) root).getRecordstoreService();
 		this.beanMetaResolver = BeanMetaResolverProvider.getInstance().get(beanMeta);
@@ -24,7 +24,7 @@ class BeanstoreRecord<BT, KT> extends AbstractBeanstore<BT, KT>{
 	}
 	
 	@Override
-	protected AbstractBeanstoreService<BT, KT> createChildService(AbstractBeanstoreService<?,?> root, Key<BT, KT> key) {
+	protected AbstractBeanstoreService<BT, KT> createChildService(AbstractBeanstoreService<Void,Void> root, Key<BT, KT> key) {
 		return new BeanstoreServiceRecord<BT, KT>(root, key);
 	}
 

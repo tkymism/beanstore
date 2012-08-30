@@ -10,24 +10,25 @@ import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.beanstore.api.BeanstoreTransaction;
 
 public abstract class AbstractBeanstoreService<PB,PK> implements BeanstoreService<PB,PK>{
-	private final AbstractBeanstoreService<?,?> rootService;
+	private final AbstractBeanstoreService<Void,Void> rootService;
 	private BeanstoreTransaction transaction; 
 	protected final Key<PB,PK> parent;
 	private Map<BeanMeta<?, ?>, Beanstore<?, ?>> storeMap = new HashMap<BeanMeta<?, ?>, Beanstore<?, ?>>();
 	
+	@SuppressWarnings("unchecked")
 	protected AbstractBeanstoreService(BeanstoreTransaction transaction){
 		this.parent = null;
-		this.rootService = this;
+		this.rootService = (AbstractBeanstoreService<Void,Void>)this;
 		this.transaction = transaction;
 	}
 	
-	protected AbstractBeanstoreService(AbstractBeanstoreService<?,?> rootService, Key<PB,PK> parent){
+	protected AbstractBeanstoreService(AbstractBeanstoreService<Void,Void> rootService, Key<PB,PK> parent){
 		this.rootService = rootService;
 		this.parent = parent;
 		this.transaction = rootService.transaction;
 	}
 	
-	protected AbstractBeanstoreService<?,?> getRoot(){
+	protected AbstractBeanstoreService<Void,Void> getRoot(){
 		return rootService;
 	}
 	
