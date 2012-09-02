@@ -17,10 +17,10 @@ import org.junit.Test;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.tkym.labs.beanstore.BeanstoreServiceGaeFactory;
-import com.tkym.labs.beanmeta.beans.Account;
-import com.tkym.labs.beanmeta.beans.AccountMeta;
-import com.tkym.labs.beanmeta.beans.Person;
-import com.tkym.labs.beanmeta.beans.PersonMeta;
+import com.tkym.labs.beans.Account;
+import com.tkym.labs.beans.AccountMeta;
+import com.tkym.labs.beans.Person;
+import com.tkym.labs.beans.PersonMeta;
 
 /**
  * 

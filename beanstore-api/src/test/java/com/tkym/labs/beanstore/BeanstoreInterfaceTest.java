@@ -10,10 +10,10 @@ import org.junit.Test;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.beanstore.api.BeanstoreServiceFactory;
-import com.tkym.labs.beanmeta.beans.Account;
-import com.tkym.labs.beanmeta.beans.AccountMeta;
-import com.tkym.labs.beanmeta.beans.Person;
-import com.tkym.labs.beanmeta.beans.PersonMeta;
+import com.tkym.labs.beans.Account;
+import com.tkym.labs.beans.AccountMeta;
+import com.tkym.labs.beans.Person;
+import com.tkym.labs.beans.PersonMeta;
 import com.tkym.labs.beanmeta.Key;
 
 public class BeanstoreInterfaceTest {
@@ -27,7 +27,7 @@ public class BeanstoreInterfaceTest {
 	@Test(expected=NullPointerException.class)
 	public void interfaceTest() throws BeanstoreException{
 		BeanstoreService<Void,Void> service = factory.create();
-		
+		PersonMeta.get();
 		PersonMeta PERSON = PersonMeta.get();
 		AccountMeta ACCOUNT = AccountMeta.get();
 		Iterator<Key<Person,Long>> ite = 

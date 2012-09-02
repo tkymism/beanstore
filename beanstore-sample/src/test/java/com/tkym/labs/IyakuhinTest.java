@@ -13,11 +13,11 @@ import com.tkym.labs.uke.Iyakuhin;
 import com.tkym.labs.uke.IyakuhinMeta;
 
 public class IyakuhinTest {
-	private static BeanstoreServiceRecord service;
+	private static BeanstoreServiceRecord<Void,Void> service;
 	private static IyakuhinMeta IYAKUHIN = IyakuhinMeta.get();
 //	@BeforeClass
 	public static void setupClass() throws Exception{
-		service = new BeanstoreServiceRecordFactory(SqliteRecordstoreRepository.asMemory()).create();
+		service = new BeanstoreServiceRecordFactory(SqliteRecordstoreRepository.inMemory()).create();
 	}
 	
 //	@AfterClass

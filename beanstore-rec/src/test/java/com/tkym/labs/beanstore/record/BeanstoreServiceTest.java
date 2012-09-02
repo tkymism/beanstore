@@ -20,12 +20,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tkym.labs.beanmeta.Key;
-import com.tkym.labs.beanmeta.beans.Account;
-import com.tkym.labs.beanmeta.beans.AccountMeta;
-import com.tkym.labs.beanmeta.beans.Bill;
-import com.tkym.labs.beanmeta.beans.BillMeta;
-import com.tkym.labs.beanmeta.beans.Person;
-import com.tkym.labs.beanmeta.beans.PersonMeta;
+import com.tkym.labs.beans.Account;
+import com.tkym.labs.beans.AccountMeta;
+import com.tkym.labs.beans.Bill;
+import com.tkym.labs.beans.BillMeta;
+import com.tkym.labs.beans.Person;
+import com.tkym.labs.beans.PersonMeta;
 import com.tkym.labs.beanstore.api.Beanstore;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;

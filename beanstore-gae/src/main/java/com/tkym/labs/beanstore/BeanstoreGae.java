@@ -10,14 +10,14 @@ import com.google.appengine.api.datastore.Entity;
 class BeanstoreGae<BT,KT> extends AbstractBeanstore<BT,KT> {
 	private final DatastoreService datastoreService;
 	private final KeyConverter<BT,KT> converter;
-	protected BeanstoreGae(AbstractBeanstoreService<?,?> rootService, BeanMeta<BT,KT> beanMeta, Key<?, ?> parent, DatastoreService datastoreService) {
+	protected BeanstoreGae(AbstractBeanstoreService<Void,Void> rootService, BeanMeta<BT,KT> beanMeta, Key<?, ?> parent, DatastoreService datastoreService) {
 		super(rootService, beanMeta, parent);
 		this.datastoreService = datastoreService;
 		this.converter = KeyConverterFactory.create(parent, beanMeta);
 	}
 
 	@Override
-	protected AbstractBeanstoreService<BT,KT> createChildService(AbstractBeanstoreService<?,?> beanstoreServiceRoot, Key<BT,KT> key) {
+	protected AbstractBeanstoreService<BT,KT> createChildService(AbstractBeanstoreService<Void,Void> beanstoreServiceRoot, Key<BT,KT> key) {
 		return new BeanstoreServiceGae<BT,KT>(beanstoreServiceRoot, key);
 	}
 

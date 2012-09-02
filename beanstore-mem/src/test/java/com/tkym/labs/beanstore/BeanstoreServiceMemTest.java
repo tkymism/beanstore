@@ -12,9 +12,9 @@ import org.junit.Test;
 
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
-import com.tkym.labs.beanmeta.beans.DataProvider;
-import com.tkym.labs.beanmeta.beans.Person;
-import com.tkym.labs.beanmeta.beans.PersonMeta;
+import com.tkym.labs.beans.DataProvider;
+import com.tkym.labs.beans.Person;
+import com.tkym.labs.beans.PersonMeta;
 import com.tkym.labs.beanstore.api.BeanQuery;
 import com.tkym.labs.beanstore.api.Beanstore;
 import com.tkym.labs.beanstore.api.BeanstoreException;

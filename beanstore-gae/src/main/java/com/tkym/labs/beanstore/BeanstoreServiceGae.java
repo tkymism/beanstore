@@ -8,7 +8,7 @@ import com.tkym.labs.beanstore.api.BeanQuery;
 class BeanstoreServiceGae<PB,PK> extends AbstractBeanstoreService<PB,PK> {
 	private DatastoreService datastoreService;
 	
-	BeanstoreServiceGae(AbstractBeanstoreService<?,?> rootService, Key<PB,PK> parent){
+	BeanstoreServiceGae(AbstractBeanstoreService<Void,Void> rootService, Key<PB,PK> parent){
 		super(rootService, parent);
 		this.datastoreService = ((BeanstoreServiceGae<?,?>)rootService).getDatastoreService();
 	}
