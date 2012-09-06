@@ -2,7 +2,7 @@ package com.tkym.labs.beanstore.api;
 
 import com.tkym.labs.beanmeta.PropertyMeta;
 
-public class BeanSort<BT,PT> implements BeanSortCriteria<BT>{
+public class BeanSort<BT,PT> implements BeanSortCriteria{
 	public enum BeanSortOperator{
 		ASCENDING,
 		DESCENDING

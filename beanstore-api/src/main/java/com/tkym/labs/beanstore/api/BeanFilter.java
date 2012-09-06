@@ -2,7 +2,7 @@ package com.tkym.labs.beanstore.api;
 
 import com.tkym.labs.beanmeta.PropertyMeta;
 
-public class BeanFilter<BT,PT> implements BeanFilterCriteria<BT>{
+public class BeanFilter<BT,PT> implements BeanFilterCriteria{
 	public enum BeanFilterOperator{
 		EQUAL,
 		NOT_EQUAL,

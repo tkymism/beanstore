@@ -1,6 +1,10 @@
 package com.tkym.labs.beanstore;
 
 import com.tkym.labs.beanstore.BeanQueryResultBuilder.QueryResultFetcher;
+import com.tkym.labs.beanstore.api.BeanFilter;
+import com.tkym.labs.beanstore.api.BeanFilterCriteria;
+import com.tkym.labs.beanstore.api.BeanSort;
+import com.tkym.labs.beanstore.api.BeanSortCriteria;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 
@@ -20,13 +24,18 @@ class BeanQueryGae<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Entity, 
 			this.ancestor = null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Query createQuery(){
 		Query query = new Query(beanMeta.getName(), ancestor);
 		QueryBuilder builder = new QueryBuilder(query);
-		for (BeanFilterItem<BT, ?> filter : super.filterItemList)
-			builder.addFilter(filter);
-		for (BeanSortItem<BT, ?> sort : super.sortItemList)
-			builder.addSort(sort);
+		for (BeanFilterCriteria filter : super.filterList)
+			if (filter instanceof BeanFilter)
+				builder.addFilter((BeanFilter<BT, ?>) filter);
+			else throw new IllegalArgumentException("unsupport type.");
+		for (BeanSortCriteria sort : super.sortList)
+			if (sort instanceof BeanSort)
+				builder.addSort((BeanSort<BT,?>)sort);
+			else throw new IllegalArgumentException("unsupport type.");
 		return query;
 	}
 

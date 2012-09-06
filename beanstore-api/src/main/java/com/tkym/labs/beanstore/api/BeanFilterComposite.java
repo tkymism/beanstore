@@ -1,25 +1,23 @@
 package com.tkym.labs.beanstore.api;
 
-import java.util.Arrays;
-import java.util.List;
 
-public class BeanFilterComposite<BT> {
-	enum BeanFilterCompositeType{
+public class BeanFilterComposite {
+	public enum BeanFilterCompositeType{
 		AND, OR
 	}
 	private final BeanFilterCompositeType type;
-	private final List<BeanFilterCriteria<BT>> childlen;
-	BeanFilterComposite(BeanFilterCompositeType type, List<BeanFilterCriteria<BT>> childlen){
+	private final BeanFilterCriteria[] childlen;
+	BeanFilterComposite(BeanFilterCompositeType type, BeanFilterCriteria... criteria){
 		this.type = type;
-		this.childlen = childlen;
-	}
-	BeanFilterComposite(BeanFilterCompositeType type, BeanFilterCriteria<BT>... criteria){
-		this(type, Arrays.asList(criteria));
+		this.childlen = criteria;
+		if (criteria.length < 1)
+			throw new IllegalArgumentException(
+					"composite length is "+criteria.length);
 	}
 	public BeanFilterCompositeType getType() {
 		return type;
 	}
-	public List<BeanFilterCriteria<BT>> getChildlen() {
+	public BeanFilterCriteria[] getChildlen() {
 		return childlen;
 	}
 }

@@ -18,15 +18,15 @@ import com.tkym.labs.beanstore.api.BeanstoreException;
 public abstract class AbstractBeanQuery<BT, KT> implements BeanQuery<BT, KT>{
 	protected final BeanMeta<BT, KT> beanMeta;
 	protected final Key<?, ?> parent;
-	protected final List<BeanFilterCriteria<BT>> filterList = new ArrayList<BeanFilterCriteria<BT>>();
-	protected final List<BeanSortCriteria<BT>> sortList = new ArrayList<BeanSortCriteria<BT>>();
+	protected final List<BeanFilterCriteria> filterList = new ArrayList<BeanFilterCriteria>();
+	protected final List<BeanSortCriteria> sortList = new ArrayList<BeanSortCriteria>();
 	protected final BeanQueryResultBuilder<BT, KT> resultBuilder = new BeanQueryResultBuilder<BT, KT>(); 
 	public AbstractBeanQuery(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		this.beanMeta = beanMeta;
 		this.parent = parent;
 	}
 	@Override
-	public final BeanQuery<BT, KT> filter(BeanFilterCriteria<BT> filter){
+	public final BeanQuery<BT, KT> filter(BeanFilterCriteria filter){
 		filterList.add(filter);
 		return this;
 	}
@@ -37,7 +37,7 @@ public abstract class AbstractBeanQuery<BT, KT> implements BeanQuery<BT, KT>{
 	}
 	
 	@Override
-	public final BeanQuery<BT, KT> sort(BeanSortCriteria<BT> sort){
+	public final BeanQuery<BT, KT> sort(BeanSortCriteria sort){
 		sortList.add(sort);
 		return this;
 	}

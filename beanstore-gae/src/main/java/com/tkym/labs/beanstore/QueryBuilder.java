@@ -4,8 +4,10 @@ package com.tkym.labs.beanstore;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.tkym.labs.beanstore.BeanFilterItem.BeanFilterOperator;
-import com.tkym.labs.beanstore.BeanSortItem.BeanSortOperator;
+import com.tkym.labs.beanstore.api.BeanFilter;
+import com.tkym.labs.beanstore.api.BeanFilter.BeanFilterOperator;
+import com.tkym.labs.beanstore.api.BeanSort;
+import com.tkym.labs.beanstore.api.BeanSort.BeanSortOperator;
 
 class QueryBuilder {
 	private final Query query;
@@ -15,11 +17,11 @@ class QueryBuilder {
 		this.query = query;
 	}
 	
-	<T> QueryBuilder addFilter(BeanFilterItem<T, ?> filter){
+	<T> QueryBuilder addFilter(BeanFilter<T, ?> filter){
 		String propertyName = filter.getMeta().getPropertyName();
 		Object[] values = filter.getValues();
 		BeanFilterOperator ope = filter.getOperator();
-		if (ope.equals(BeanFilterOperator.EQUAL)) 
+		if (ope.equals(BeanFilterOperator.EQUAL))
 			query.addFilter(propertyName, FilterOperator.EQUAL, values[0]);
 		else if (ope.equals(BeanFilterOperator.NOT_EQUAL)) 
 			query.addFilter(propertyName, FilterOperator.NOT_EQUAL, values[0]);
@@ -42,7 +44,7 @@ class QueryBuilder {
 		return this;
 	}
 	
-	<T> QueryBuilder addSort(BeanSortItem<T, ?> sort){
+	<T> QueryBuilder addSort(BeanSort<T, ?> sort){
 		String propertyName = sort.getMeta().getPropertyName();
 		BeanSortOperator ope = sort.getOperator();
 		if (ope.equals(BeanSortOperator.ASCENDING))
