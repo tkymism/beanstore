@@ -3,11 +3,14 @@ package com.tkym.labs.beanstore.record;
 import java.util.Iterator;
 
 import com.tkym.labs.beanstore.AbstractBeanQueryConvertible;
-import com.tkym.labs.beanstore.BeanFilterItem;
-import com.tkym.labs.beanstore.BeanSortItem;
 import com.tkym.labs.beanstore.BeanQueryResultBuilder.QueryResultFetcher;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
+import com.tkym.labs.beanstore.api.BeanFilter;
+import com.tkym.labs.beanstore.api.BeanFilterComposite;
+import com.tkym.labs.beanstore.api.BeanFilterCriteria;
+import com.tkym.labs.beanstore.api.BeanSort;
+import com.tkym.labs.beanstore.api.BeanSortCriteria;
 import com.tkym.labs.beanstore.record.BeanMetaResolver.AncestorKeyStack;
 import com.tkym.labs.record.QueryBuilder;
 import com.tkym.labs.record.QueryFilterBuilder;
@@ -23,7 +26,9 @@ class BeanQueryRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Recor
 	
 	BeanQueryRecord(RecordstoreService service, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		super(beanMeta, parent);
-		this.beanMetaResolver = BeanMetaResolverProvider.getInstance().get(beanMeta);
+		this.beanMetaResolver = BeanMetaResolverProvider.
+				getInstance().
+				get(beanMeta);
 		this.queryBuilder = service.query(beanMetaResolver.getTableMeta());
 		AncestorKeyStack stack = new AncestorKeyStack(parent);
 		Object[] values = stack.getKeyValuesArray();
@@ -31,51 +36,60 @@ class BeanQueryRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Recor
 			this.queryBuilder.is(beanMetaResolver.getTableMeta().keyNames()[i], values[i]);
 	}
 	
-	<PT> QueryBuilder putItem(BeanSortItem<BT, PT> item){
-		QuerySortBuilder builder = this.queryBuilder.sort(item.getMeta().getPropertyName());
-		switch (item.getOperator()) {
-		case ASCENDING:
-			return builder.asc();
-		case DESCENDING:
-			return builder.desc();
-		default:
-			throw new IllegalArgumentException(
-					"BeanSortOperator is illegal type :" + item.getOperator());
+	@SuppressWarnings("unchecked")
+	private QueryBuilder buildSort(BeanSortCriteria<BT> criteria){
+		return buildSort((BeanSort<BT,?>) criteria);
+	}
+	
+	private <PT> QueryBuilder buildSort(BeanSort<BT,PT> sort){
+		QuerySortBuilder builder = this.queryBuilder.sort(sort.getMeta().getPropertyName());
+		switch (sort.getOperator()) {
+		case ASCENDING: return builder.asc();
+		case DESCENDING: return builder.desc();
+		default: throw new IllegalArgumentException(
+					"BeanSortOperator is illegal type :" + sort.getOperator());
 		}
 	}
 	
-	<PT> QueryBuilder putItem(BeanFilterItem<BT, PT> item){
-		QueryFilterBuilder<PT> builder = this.queryBuilder.filter(item.getMeta().getPropertyName(), item.getMeta().getPropertyType());
-		switch(item.getOperator()){
+	QueryBuilder buildFilter(BeanFilterComposite<BT> composite){
+		this.queryBuilder.filter(filter)
+	}
+	
+	<PT> QueryBuilder buildFilter(BeanFilter<BT,PT> filter){
+		QueryFilterBuilder<PT> builder = this.queryBuilder.filter(filter.getMeta().getPropertyName(), filter.getMeta().getPropertyType());
+		switch(filter.getOperator()){
 		case EQUAL: 
-			return builder.equalsTo(item.getValues()[0]);
+			return builder.equalsTo(filter.getValues()[0]);
 		case NOT_EQUAL: 
-			return builder.notEquals(item.getValues()[0]);
+			return builder.notEquals(filter.getValues()[0]);
 		case LESS_THAN_OR_EQUAL: 
-			return builder.lessEqual(item.getValues()[0]);
+			return builder.lessEqual(filter.getValues()[0]);
 		case LESS_THAN: 
-			return builder.lessThan(item.getValues()[0]);
+			return builder.lessThan(filter.getValues()[0]);
 		case GREATER_THAN_OR_EQUAL:
-			return builder.greaterEqual(item.getValues()[0]);
+			return builder.greaterEqual(filter.getValues()[0]);
 		case GREATER_THAN: 
-			return builder.greaterThan(item.getValues()[0]);
+			return builder.greaterThan(filter.getValues()[0]);
 		case IN: 
-			return builder.in(item.getValues());
+			return builder.in(filter.getValues());
 		case START_WITH: 
-			return builder.startsWith(item.getValues()[0]);
+			return builder.startsWith(filter.getValues()[0]);
 		case END_WITH: 
-			return builder.endsWith(item.getValues()[0]);
+			return builder.endsWith(filter.getValues()[0]);
 		case CONTAIN: 
-			return builder.contains(item.getValues()[0]);
+			return builder.contains(filter.getValues()[0]);
 		default:
 			throw new IllegalArgumentException(
-					"BeanFilterOperator is illegal type :" + item.getOperator());
+					"BeanFilterOperator is illegal type :" + filter.getOperator());
 		}
+	}
+	
+	<PT> QueryBuilder buildFilter(BeanFilterCriteria<BT> criteria){
 	}
 	
 	QueryBuilder preparedQuery(){
-		for (BeanFilterItem<BT, ?> item : filterItemList) putItem(item);
-		for (BeanSortItem<BT, ?> item : sortItemList) putItem(item);
+		for (BeanFilterCriteria<BT> item : filterList) buildFilter(item);
+		for (BeanSortCriteria<BT> item : sortList) buildSort(item);
 		return this.queryBuilder;
 	}
 	

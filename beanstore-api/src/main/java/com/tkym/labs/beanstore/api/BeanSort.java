@@ -1,16 +1,15 @@
-package com.tkym.labs.beanstore;
+package com.tkym.labs.beanstore.api;
 
 import com.tkym.labs.beanmeta.PropertyMeta;
 
-
-public class BeanSortItem<BT, PT> {
+public class BeanSort<BT,PT> implements BeanSortCriteria<BT>{
 	public enum BeanSortOperator{
 		ASCENDING,
 		DESCENDING
 	}
 	private final PropertyMeta<BT, PT> meta;
 	private final BeanSortOperator operator;
-	public BeanSortItem(PropertyMeta<BT, PT> meta, BeanSortOperator operator) {
+	BeanSort(PropertyMeta<BT, PT> meta, BeanSortOperator operator) {
 		this.meta = meta;
 		this.operator = operator;
 	}

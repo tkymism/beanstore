@@ -1,3 +1,3 @@
 package com.tkym.labs.beanstore.api;
 
-public interface BeanSortCriteria {}
+public interface BeanSortCriteria<BT> {}

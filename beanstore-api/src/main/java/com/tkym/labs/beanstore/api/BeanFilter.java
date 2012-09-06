@@ -1,8 +1,8 @@
-package com.tkym.labs.beanstore;
+package com.tkym.labs.beanstore.api;
 
 import com.tkym.labs.beanmeta.PropertyMeta;
 
-public class BeanFilterItem<BT, PT> {
+public class BeanFilter<BT,PT> implements BeanFilterCriteria<BT>{
 	public enum BeanFilterOperator{
 		EQUAL,
 		NOT_EQUAL,
@@ -18,7 +18,7 @@ public class BeanFilterItem<BT, PT> {
 	private final PropertyMeta<BT, PT> meta;
 	private final PT[] values;
 	private final BeanFilterOperator operator;
-	public BeanFilterItem(PropertyMeta<BT, PT> meta, BeanFilterOperator operator, PT... values) {
+	BeanFilter(PropertyMeta<BT, PT> meta, BeanFilterOperator operator, PT... values) {
 		this.meta = meta;
 		this.values = values;
 		this.operator = operator;
