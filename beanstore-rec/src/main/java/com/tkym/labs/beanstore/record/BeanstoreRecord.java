@@ -2,7 +2,6 @@ package com.tkym.labs.beanstore.record;
 
 
 import com.tkym.labs.beanstore.AbstractBeanstore;
-import com.tkym.labs.beanstore.AbstractBeanstoreService;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.PropertyMeta;
@@ -16,18 +15,13 @@ class BeanstoreRecord<BT, KT> extends AbstractBeanstore<BT, KT>{
 	private final RecordKeyBuilder keyBuilder;
 	private final BeanMetaResolver<BT,KT> beanMetaResolver;
 
-	BeanstoreRecord(AbstractBeanstoreService<Void,Void> root, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent){
+	BeanstoreRecord(BeanstoreRootServiceRecord root, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent){
 		super(root, beanMeta, parent);
-		this.recordstoreService = ((BeanstoreServiceRecord<?,?>) root).getRecordstoreService();
+		this.recordstoreService = root.getRecordstoreService();
 		this.beanMetaResolver = BeanMetaResolverProvider.getInstance().get(beanMeta);
 		this.keyBuilder = this.beanMetaResolver.createRecordKeyBuilder(parent);
 	}
 	
-	@Override
-	protected AbstractBeanstoreService<BT, KT> createChildService(AbstractBeanstoreService<Void,Void> root, Key<BT, KT> key) {
-		return new BeanstoreServiceRecord<BT, KT>(root, key);
-	}
-
 	@Override
 	protected BT getDelegate(KT key) throws Exception{
 		BT bean = beanMeta.newInstance();

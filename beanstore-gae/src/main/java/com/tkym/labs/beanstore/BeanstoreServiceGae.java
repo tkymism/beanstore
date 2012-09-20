@@ -3,32 +3,33 @@ package com.tkym.labs.beanstore;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
-import com.tkym.labs.beanstore.api.BeanQuery;
+import com.tkym.labs.beanstore.api.BeanstoreTransaction;
 
-class BeanstoreServiceGae<PB,PK> extends AbstractBeanstoreService<PB,PK> {
-	private DatastoreService datastoreService;
-	
-	BeanstoreServiceGae(AbstractBeanstoreService<Void,Void> rootService, Key<PB,PK> parent){
-		super(rootService, parent);
-		this.datastoreService = ((BeanstoreServiceGae<?,?>)rootService).getDatastoreService();
-	}
-	
-	BeanstoreServiceGae(DatastoreService datastoreService){
-		super(new BeanstoreTransactionGae(datastoreService));
+class BeanstoreServiceGae extends AbstractBeanstoreRootService {
+	private final DatastoreService datastoreService;
+	private final BeanstoreTransaction transaction;
+	BeanstoreServiceGae(DatastoreService datastoreService) {
 		this.datastoreService = datastoreService;
+		this.transaction = new BeanstoreTransactionGae(datastoreService);
 	}
-	
-	DatastoreService getDatastoreService(){
-		return datastoreService;
+
+	@Override
+	public BeanstoreTransaction getTransaction() {
+		return this.transaction;
 	}
-	
-	public <BT, KT> BeanQuery<BT, KT> query(BeanMeta<BT, KT> meta) {
-		return new BeanQueryGae<BT, KT>(meta, parent, datastoreService);
+
+	@Override
+	protected <BT, KT> AbstractBeanQuery<BT, KT> createBeanQuery(
+			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+		return new BeanQueryGae<BT, KT>(beanMeta, parent, datastoreService);
 	}
 
 	@Override
 	protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(
-			BeanMeta<BT, KT> beanMeta, Key<PB,PK> parent) {
-		return new BeanstoreGae<BT, KT>(super.getRoot(), beanMeta, parent, datastoreService);
+			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+		return new BeanstoreGae<BT, KT>(this, beanMeta, parent, datastoreService);
+	}
+	DatastoreService getDatastoreService(){
+		return datastoreService;
 	}
 }

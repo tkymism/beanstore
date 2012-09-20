@@ -6,14 +6,14 @@ import java.util.List;
 
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.api.BeanstoreException;
-import com.tkym.labs.beanstore.record.BeanstoreServiceRecord;
+import com.tkym.labs.beanstore.record.BeanstoreRootServiceRecord;
 import com.tkym.labs.beanstore.record.BeanstoreServiceRecordFactory;
 import com.tkym.labs.record.SqliteRecordstoreRepository;
 import com.tkym.labs.uke.Iyakuhin;
 import com.tkym.labs.uke.IyakuhinMeta;
 
 public class IyakuhinTest {
-	private static BeanstoreServiceRecord<Void,Void> service;
+	private static BeanstoreRootServiceRecord service;
 	private static IyakuhinMeta IYAKUHIN = IyakuhinMeta.get();
 //	@BeforeClass
 	public static void setupClass() throws Exception{
@@ -25,7 +25,6 @@ public class IyakuhinTest {
 //		service.drop(IYAKUHIN);
 		service.getTransaction().close();
 	}
-	
 	
 //	@Test
 	public void prepareIyakuhin() throws BeanstoreException{

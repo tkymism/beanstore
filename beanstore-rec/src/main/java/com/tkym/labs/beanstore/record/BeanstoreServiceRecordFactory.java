@@ -11,9 +11,9 @@ public class BeanstoreServiceRecordFactory implements BeanstoreServiceFactory{
 		this.factory = factory;
 	}
 	@Override
-	public BeanstoreServiceRecord<Void,Void> create() throws BeanstoreException{
+	public BeanstoreRootServiceRecord create() throws BeanstoreException{
 		try {
-			return new BeanstoreServiceRecord<Void,Void>(factory.create());
+			return new BeanstoreRootServiceRecord(factory.create());
 		} catch (RecordstoreException e) {
 			throw new BeanstoreException(e);
 		}

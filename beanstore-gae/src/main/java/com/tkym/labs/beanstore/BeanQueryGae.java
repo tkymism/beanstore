@@ -28,11 +28,11 @@ class BeanQueryGae<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Entity, 
 	private Query createQuery(){
 		Query query = new Query(beanMeta.getName(), ancestor);
 		QueryBuilder builder = new QueryBuilder(query);
-		for (BeanFilterCriteria filter : super.filterList)
+		for (BeanFilterCriteria filter : super.getQuerySource().filterList())
 			if (filter instanceof BeanFilter)
 				builder.addFilter((BeanFilter<BT, ?>) filter);
 			else throw new IllegalArgumentException("unsupport type.");
-		for (BeanSortCriteria sort : super.sortList)
+		for (BeanSortCriteria sort : super.getQuerySource().sortList())
 			if (sort instanceof BeanSort)
 				builder.addSort((BeanSort<BT,?>)sort);
 			else throw new IllegalArgumentException("unsupport type.");

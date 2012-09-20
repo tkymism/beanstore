@@ -1,8 +1,5 @@
 package com.tkym.labs.beanstore;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.PropertyMeta;
@@ -10,24 +7,29 @@ import com.tkym.labs.beanstore.BeanQueryResultBuilder.QueryResultFetcher;
 import com.tkym.labs.beanstore.api.BeanFilterBuilder;
 import com.tkym.labs.beanstore.api.BeanFilterCriteria;
 import com.tkym.labs.beanstore.api.BeanQuery;
+import com.tkym.labs.beanstore.api.BeanQueryBuilder;
 import com.tkym.labs.beanstore.api.BeanQueryResult;
+import com.tkym.labs.beanstore.api.BeanQuerySource;
 import com.tkym.labs.beanstore.api.BeanSortBuilder;
 import com.tkym.labs.beanstore.api.BeanSortCriteria;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 
 public abstract class AbstractBeanQuery<BT, KT> implements BeanQuery<BT, KT>{
+	private final BeanQueryBuilder<BT,KT> builder;
 	protected final BeanMeta<BT, KT> beanMeta;
 	protected final Key<?, ?> parent;
-	protected final List<BeanFilterCriteria> filterList = new ArrayList<BeanFilterCriteria>();
-	protected final List<BeanSortCriteria> sortList = new ArrayList<BeanSortCriteria>();
 	protected final BeanQueryResultBuilder<BT, KT> resultBuilder = new BeanQueryResultBuilder<BT, KT>(); 
 	public AbstractBeanQuery(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		this.beanMeta = beanMeta;
+		this.builder = BeanQueryBuilder.create(beanMeta);
 		this.parent = parent;
+	}
+	protected final BeanQuerySource<BT, KT> getQuerySource(){
+		return builder.getQuerySource();
 	}
 	@Override
 	public final BeanQuery<BT, KT> filter(BeanFilterCriteria filter){
-		filterList.add(filter);
+		builder.filter(filter);
 		return this;
 	}
 	
@@ -38,7 +40,7 @@ public abstract class AbstractBeanQuery<BT, KT> implements BeanQuery<BT, KT>{
 	
 	@Override
 	public final BeanQuery<BT, KT> sort(BeanSortCriteria sort){
-		sortList.add(sort);
+		builder.sort(sort);
 		return this;
 	}
 	

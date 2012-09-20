@@ -1,5 +1,7 @@
 package com.tkym.labs.beanstore.record;
 
+import static com.tkym.labs.beanstore.record.BeanCriteriaConverter.convert;
+
 import java.util.Iterator;
 
 import com.tkym.labs.beanmeta.BeanMeta;
@@ -32,16 +34,16 @@ class BeanQueryRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Recor
 	}
 	
 	private QueryBuilder buildFilter(BeanFilterCriteria criteria){
-		return this.queryBuilder.filter(BeanCriteriaConverter.convert(criteria));
+		return this.queryBuilder.filter(convert(criteria));
 	}
 	
 	private QueryBuilder buildSort(BeanSortCriteria criteria){
-		return this.queryBuilder.sort(BeanCriteriaConverter.convert(criteria));
+		return this.queryBuilder.sort(convert(criteria));
 	}
 	
 	QueryBuilder preparedQuery(){
-		for (BeanFilterCriteria item : filterList) buildFilter(item);
-		for (BeanSortCriteria item : sortList) buildSort(item);
+		for (BeanFilterCriteria item : super.getQuerySource().filterList()) buildFilter(item);
+		for (BeanSortCriteria item : super.getQuerySource().sortList()) buildSort(item);
 		return this.queryBuilder;
 	}
 	

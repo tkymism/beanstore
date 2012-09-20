@@ -32,7 +32,7 @@ import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.record.SqliteRecordstoreRepository;
 
 public class BeanstoreServiceTest {
-	private static BeanstoreServiceRecord<Void,Void> service; 
+	private static BeanstoreRootServiceRecord service; 
 	private static PersonMeta PERSON = PersonMeta.get();
 	private static AccountMeta ACCOUNT = AccountMeta.get();
 	private static BillMeta BILL = BillMeta.get();

@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
 import com.tkym.labs.beanstore.api.BeanstoreServiceFactory;
+import com.tkym.labs.beanstore.api.BeanstoreRootService;
 import com.tkym.labs.beans.Account;
 import com.tkym.labs.beans.AccountMeta;
 import com.tkym.labs.beans.Person;
@@ -19,22 +20,18 @@ import com.tkym.labs.beanmeta.Key;
 public class BeanstoreInterfaceTest {
 	private BeanstoreServiceFactory factory = new BeanstoreServiceFactory(){
 		@Override
-		public BeanstoreService<Void,Void> create() {
+		public BeanstoreRootService create() {
 			return null;
 		}
 	};
 	
 	@Test(expected=NullPointerException.class)
 	public void interfaceTest() throws BeanstoreException{
-		BeanstoreService<Void,Void> service = factory.create();
-		PersonMeta.get();
+		BeanstoreRootService service = factory.create();
 		PersonMeta PERSON = PersonMeta.get();
 		AccountMeta ACCOUNT = AccountMeta.get();
 		Iterator<Key<Person,Long>> ite = 
-				service.query(PERSON).
-				filter(PERSON.name).startsWith("foo").
-				sort(PERSON.name).asc().
-				key().asIterator();
+				service.query(PERSON).filter(PERSON.name).startsWith("foo").sort(PERSON.name).asc().key().asIterator();
 		
 		while(ite.hasNext()){
 			BeanstoreService<Person,Long> personService = 
