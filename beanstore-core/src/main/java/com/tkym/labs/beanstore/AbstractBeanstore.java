@@ -1,8 +1,5 @@
 package com.tkym.labs.beanstore;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.api.Beanstore;
@@ -13,8 +10,6 @@ public abstract class AbstractBeanstore<BT, KT> implements Beanstore<BT, KT>{
 	protected final AbstractBeanstoreRootService beanstoreServiceRoot;
 	protected final BeanMeta<BT, KT> beanMeta;
 	protected final Key<?,?> parent;
-	private final Map<KT, BeanstoreService<BT, KT>> childServiceMap = 
-			new ConcurrentHashMap<KT, BeanstoreService<BT, KT>>();
 	protected AbstractBeanstore(AbstractBeanstoreRootService rootService, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		this.beanstoreServiceRoot = rootService;
 		this.beanMeta = beanMeta;
@@ -23,12 +18,7 @@ public abstract class AbstractBeanstore<BT, KT> implements Beanstore<BT, KT>{
 	
 	@Override
 	public final BeanstoreService<BT, KT> is(KT key) {
-		BeanstoreService<BT, KT> service = childServiceMap.get(key);
-		if (service == null){
-			service = new DefaultBeanstoreService<BT, KT>(this.beanstoreServiceRoot, this.key(key));
-			childServiceMap.put(key, service);
-		}
-		return service;
+		return new DefaultBeanstoreService<BT, KT>(this.beanstoreServiceRoot, this.key(key));
 	}
 	
 	@Override
