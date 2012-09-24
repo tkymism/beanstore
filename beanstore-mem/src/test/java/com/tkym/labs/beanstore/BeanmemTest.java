@@ -7,21 +7,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.text.DecimalFormat;
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
-import com.tkym.labs.beanmeta.PropertyMeta;
 import com.tkym.labs.beans.Account;
 import com.tkym.labs.beans.AccountMeta;
 import com.tkym.labs.beans.Bill;
@@ -166,14 +160,6 @@ public class BeanmemTest {
 				meta(BILL).is(0).build());
 		assertThat(bill.getNo(), is(0));
 	}
-	
-	@Test
-	public void testSubMap001(){
-		List<BeanMeta<?,?>> trace = BeanmemMap.traceParant(BILL, PERSON);
-		for (BeanMeta<?,?> meta : trace)
-			System.out.println(meta.getName());
-	}
-	
 	@Test
 	public void testComparator(){
 		Comparator<Account> comparator = new Comparator<Account>() {
@@ -192,103 +178,5 @@ public class BeanmemTest {
 		treeSet.add(DataProvider.create(2L, 1));
 		treeSet.add(DataProvider.create(2L, 2));
 		assertThat(treeSet.size(), is(6));
-	}
-	
-	class BeanMemRepository{
-		private Map<BeanMeta<?, ?>, BeanmemMap<?,?>> cachemap = 
-				new ConcurrentHashMap<BeanMeta<?,?>, BeanmemMap<?,?>>();
-		<BT,KT> BeanmemMap<BT,KT> get(BeanMeta<BT, KT> beanMeta){
-			@SuppressWarnings("unchecked")
-			BeanmemMap<BT,KT> map = (BeanmemMap<BT,KT>) cachemap.get(beanMeta);
-			if (map == null) {
-				map = new BeanmemMap<BT,KT>(beanMeta);
-				cachemap.put(beanMeta, map);
-			}
-			return map;
-		}
-	}
-	static class BeanmemMap<BT,KT>{
-		private final BeanMeta<BT, KT> beanMeta;
-		private ConcurrentSkipListMap<Key<BT, KT>, Beanmem<BT,KT>> memmap = 
-				new ConcurrentSkipListMap<Key<BT, KT>, Beanmem<BT,KT>>();
-		BeanmemMap(BeanMeta<BT, KT> beanMeta) {
-			this.beanMeta = beanMeta;
-		}
-		BeanmemMap(BeanMeta<BT, KT> beanMeta, Map<Key<BT, KT>, Beanmem<BT,KT>> map) {
-			this.beanMeta = beanMeta;
-			this.memmap.putAll(map);
-		}
-		Beanmem<BT,KT> get(Key<BT, KT> key){
-			return memmap.get(key);
-		}
-		Beanmem<BT,KT> put(Beanmem<BT,KT> mem){
-			return memmap.put(mem.getKey(), mem);
-		}
-		Beanmem<BT,KT> remove(Key<BT, KT> key){
-			return memmap.remove(key);
-		}
-		BeanmemMap<BT,KT> sub(Key<?,?> parent){
-			Key<BT,KT> max = buildMaxKey(parent, this.beanMeta);
-			Key<BT,KT> min = buildMinKey(parent, this.beanMeta);
-			return new BeanmemMap<BT,KT>(beanMeta, memmap.headMap(max).tailMap(min));
-		}
-		static List<BeanMeta<?,?>> traceParant(BeanMeta<?,?> from, BeanMeta<?,?> to){
-			LinkedList<BeanMeta<?,?>> array = new LinkedList<BeanMeta<?,?>>();
-			BeanMeta<?,?> current = from;
-			while(current != null){
-				if (current.equals(to)) break;
-				array.addFirst(current);
-				current = current.parent();
-			}
-			return array;
-		}
-		@SuppressWarnings("unchecked")
-		static <BT, KT> Key<BT, KT> buildMaxKey(Key<?,?> parent, BeanMeta<BT, KT> meta){
-			List<BeanMeta<?,?>> metas = traceParant(meta, parent.getBeanMeta());
-			KeyBuilder<?,?> builder = KeyBuilder.parent(parent);
-			for (BeanMeta<?,?> m : metas)
-				builder.meta(m).max();
-			return (Key<BT, KT>) builder.build();
-		}
-		@SuppressWarnings("unchecked")
-		static <BT, KT> Key<BT, KT> buildMinKey(Key<?,?> parent, BeanMeta<BT, KT> meta){
-			List<BeanMeta<?,?>> metas = traceParant(meta, parent.getBeanMeta());
-			KeyBuilder<?,?> builder = KeyBuilder.parent(parent);
-			for (BeanMeta<?,?> m : metas)
-				builder.meta(m).min();
-			return (Key<BT, KT>) builder.build();
-		}
-	}
-	class Beanmem<BT,KT>{
-		private final Key<BT, KT> key;
-		private final BT value;
-		Beanmem(Key<BT, KT> key, BT value) {
-			this.key = key;
-			this.value = value;
-		}
-		Key<BT, KT> getKey() {
-			return key;
-		}
-		BT getValue() {
-			return value;
-		}
-	}
-	class BeanmemComparator<BT,KT,PT extends Comparable<PT>> implements Comparator<Beanmem<BT,KT>>{
-		private final PropertyMeta<BT, PT> propertyMeta;
-		BeanmemComparator(PropertyMeta<BT, PT> propertyMeta){
-			this.propertyMeta = propertyMeta;
-			if (!Comparable.class.isAssignableFrom(propertyMeta.getPropertyType()))
-				throw new IllegalArgumentException(
-								propertyMeta.getBeanType().getName()+"."+
-										propertyMeta.getPropertyName()+
-								" is not support Comparator. type is"+
-										propertyMeta.getPropertyType().getName());
-		}
-		@Override
-		public int compare(Beanmem<BT, KT> o1, Beanmem<BT, KT> o2) {
-			PT p1 = propertyMeta.access(o1.getValue()).get();
-			PT p2 = propertyMeta.access(o2.getValue()).get();
-			return p1.compareTo(p2);
-		}
 	}
 }
