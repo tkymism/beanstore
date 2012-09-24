@@ -9,6 +9,7 @@ import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.AbstractBeanQueryConvertible;
 import com.tkym.labs.beanstore.BeanQueryResultBuilder.QueryResultFetcher;
 import com.tkym.labs.beanstore.api.BeanFilterCriteria;
+import com.tkym.labs.beanstore.api.BeanQuerySource;
 import com.tkym.labs.beanstore.api.BeanSortCriteria;
 import com.tkym.labs.beanstore.record.BeanMetaResolver.AncestorKeyStack;
 import com.tkym.labs.record.QueryBuilder;
@@ -17,13 +18,14 @@ import com.tkym.labs.record.Record;
 import com.tkym.labs.record.RecordKey;
 import com.tkym.labs.record.RecordstoreService;
 
-class BeanQueryRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Record, RecordKey> {
+class BeanQueryExecutorRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Record, RecordKey> {
 	private QueryBuilder queryBuilder;
 	private final BeanMetaResolver<BT,KT> beanMetaResolver;
 	
-	BeanQueryRecord(RecordstoreService service, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+	BeanQueryExecutorRecord(RecordstoreService service, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		super(beanMeta, parent);
-		this.beanMetaResolver = BeanMetaResolverProvider.
+		this.beanMetaResolver = 
+				BeanMetaResolverProvider.
 				getInstance().
 				get(beanMeta);
 		this.queryBuilder = service.query(beanMetaResolver.getTableMeta());
@@ -41,15 +43,15 @@ class BeanQueryRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Recor
 		return this.queryBuilder.sort(convert(criteria));
 	}
 	
-	QueryBuilder preparedQuery(){
-		for (BeanFilterCriteria item : super.getQuerySource().filterList()) buildFilter(item);
-		for (BeanSortCriteria item : super.getQuerySource().sortList()) buildSort(item);
+	QueryBuilder preparedQuery(BeanQuerySource<BT, KT> objects){
+		for (BeanFilterCriteria item : objects.filterList()) buildFilter(item);
+		for (BeanSortCriteria item : objects.sortList()) buildSort(item);
 		return this.queryBuilder;
 	}
 	
 	@Override
-	protected QueryResultFetcher<Record> executeQueryAsBeanReal() throws Exception {
-		final QueryResult<Record> result = preparedQuery().record();
+	protected QueryResultFetcher<Record> executeQueryAsBeanReal(BeanQuerySource<BT, KT> objects) throws Exception {
+		final QueryResult<Record> result = preparedQuery(objects).record();
 		return new QueryResultFetcher<Record>() {
 			@Override
 			public Iterator<Record> iterator() throws Exception {
@@ -63,8 +65,8 @@ class BeanQueryRecord<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Recor
 	}
 
 	@Override
-	protected QueryResultFetcher<RecordKey> executeQueryAsKeyReal() throws Exception {
-		final QueryResult<RecordKey> result = preparedQuery().key();
+	protected QueryResultFetcher<RecordKey> executeQueryAsKeyReal(BeanQuerySource<BT, KT> objects) throws Exception {
+		final QueryResult<RecordKey> result = preparedQuery(objects).key();
 		return new QueryResultFetcher<RecordKey>() {
 			@Override
 			public Iterator<RecordKey> iterator() throws Exception{

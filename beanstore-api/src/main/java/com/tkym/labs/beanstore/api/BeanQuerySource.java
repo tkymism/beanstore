@@ -26,7 +26,7 @@ public class BeanQuerySource<BT,KT>{
 	public List<BeanSortCriteria> sortList(){
 		return sortList;
 	}
-	BeanMeta<BT, KT> getBeanMeta(){
+	public BeanMeta<BT, KT> getBeanMeta(){
 		return meta;
 	}
 }

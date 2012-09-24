@@ -9,24 +9,24 @@ import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanmeta.Key;
 
 
-public class BeanQueryResultBuilder<BT,KT> {
-	public BeanQueryResult<BT> buildAsBean(QueryResultFetcher<BT> fetcher){
+public class BeanQueryResultBuilder {
+	public static <BT> BeanQueryResult<BT> buildAsBean(QueryResultFetcher<BT> fetcher){
 		return new DefaultBeanQueryResult<BT>(fetcher);
 	}
 	
-	public BeanQueryResult<Key<BT, KT>> buildAsKey(QueryResultFetcher<Key<BT, KT>> fetcher){
+	public static <BT,KT> BeanQueryResult<Key<BT, KT>> buildAsKey(QueryResultFetcher<Key<BT, KT>> fetcher){
 		return new DefaultBeanQueryResult<Key<BT, KT>>(fetcher);
 	}
 	
-	public <FT> QueryResultFetcher<Key<BT, KT>> buildConvertibleKeyFetcher(QueryResultFetchConverter<Key<BT, KT>,FT> converter, QueryResultFetcher<FT> fetcher){
+	public static <BT,KT,FT> QueryResultFetcher<Key<BT, KT>> buildConvertibleKeyFetcher(QueryResultFetchConverter<Key<BT, KT>,FT> converter, QueryResultFetcher<FT> fetcher){
 		return new ConvertBeanQueryFetcher<Key<BT, KT>,FT>(converter, fetcher);
 	}
 	
-	public <FT> QueryResultFetcher<BT> buildConvertibleBeanFetcher(QueryResultFetchConverter<BT,FT> converter, QueryResultFetcher<FT> fetcher){
+	public static <BT,KT,FT> QueryResultFetcher<BT> buildConvertibleBeanFetcher(QueryResultFetchConverter<BT,FT> converter, QueryResultFetcher<FT> fetcher){
 		return new ConvertBeanQueryFetcher<BT,FT>(converter, fetcher);
 	}
 	
-	class ConvertBeanQueryFetcher<QT,FT> implements QueryResultFetcher<QT>{
+	static class ConvertBeanQueryFetcher<QT,FT> implements QueryResultFetcher<QT>{
 		private QueryResultFetchConverter<QT,FT> converter;
 		private QueryResultFetcher<FT> fetcher;
 		ConvertBeanQueryFetcher(QueryResultFetchConverter<QT,FT> converter, QueryResultFetcher<FT> fetcher){
@@ -52,7 +52,7 @@ public class BeanQueryResultBuilder<BT,KT> {
 		}
 	} 
 	
-	public abstract class AbstractConvertIterator<QT, FT> implements Iterator<QT> {
+	public static abstract class AbstractConvertIterator<QT, FT> implements Iterator<QT> {
 		private Iterator<FT> iterator;
 
 		AbstractConvertIterator(Iterator<FT> iterator) {
@@ -77,16 +77,16 @@ public class BeanQueryResultBuilder<BT,KT> {
 		}
 	}
 	
-	public interface QueryResultFetchConverter<QT,ST>{
+	public static interface QueryResultFetchConverter<QT,ST>{
 		public QT convert(ST source) throws Exception;
 	}
 	
-	public interface QueryResultFetcher<QT>{
+	public static interface QueryResultFetcher<QT>{
 		public Iterator<QT> iterator() throws Exception;
 		public QT singleValue() throws Exception;
 	}
 	
-	public class DefaultBeanQueryResult<QT> implements BeanQueryResult<QT>{
+	public static class DefaultBeanQueryResult<QT> implements BeanQueryResult<QT>{
 		private final QueryResultFetcher<QT> fetcher;
 		DefaultBeanQueryResult(QueryResultFetcher<QT> fetcher){
 			this.fetcher = fetcher;

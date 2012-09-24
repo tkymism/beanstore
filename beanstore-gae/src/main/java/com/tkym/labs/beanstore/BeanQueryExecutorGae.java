@@ -3,6 +3,7 @@ package com.tkym.labs.beanstore;
 import com.tkym.labs.beanstore.BeanQueryResultBuilder.QueryResultFetcher;
 import com.tkym.labs.beanstore.api.BeanFilter;
 import com.tkym.labs.beanstore.api.BeanFilterCriteria;
+import com.tkym.labs.beanstore.api.BeanQuerySource;
 import com.tkym.labs.beanstore.api.BeanSort;
 import com.tkym.labs.beanstore.api.BeanSortCriteria;
 import com.tkym.labs.beanmeta.BeanMeta;
@@ -12,10 +13,10 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 
-class BeanQueryGae<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Entity, Entity>{
+class BeanQueryExecutorGae<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Entity, Entity>{
 	private final DatastoreService datastoreService;
 	private final com.google.appengine.api.datastore.Key ancestor;
-	BeanQueryGae(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent, DatastoreService datastoreService) {
+	BeanQueryExecutorGae(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent, DatastoreService datastoreService) {
 		super(beanMeta, parent);
 		this.datastoreService = datastoreService;
 		if (parent != null)
@@ -25,14 +26,14 @@ class BeanQueryGae<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Entity, 
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Query createQuery(){
+	private Query createQuery(BeanQuerySource<BT, KT> params){
 		Query query = new Query(beanMeta.getName(), ancestor);
 		QueryBuilder builder = new QueryBuilder(query);
-		for (BeanFilterCriteria filter : super.getQuerySource().filterList())
+		for (BeanFilterCriteria filter : params.filterList())
 			if (filter instanceof BeanFilter)
 				builder.addFilter((BeanFilter<BT, ?>) filter);
 			else throw new IllegalArgumentException("unsupport type.");
-		for (BeanSortCriteria sort : super.getQuerySource().sortList())
+		for (BeanSortCriteria sort : params.sortList())
 			if (sort instanceof BeanSort)
 				builder.addSort((BeanSort<BT,?>)sort);
 			else throw new IllegalArgumentException("unsupport type.");
@@ -40,13 +41,13 @@ class BeanQueryGae<BT, KT> extends AbstractBeanQueryConvertible<BT, KT, Entity, 
 	}
 
 	@Override
-	protected QueryResultFetcher<Entity> executeQueryAsBeanReal() throws Exception {
-		return new QueryResultFetcherForEntity(datastoreService.prepare(createQuery()));
+	protected QueryResultFetcher<Entity> executeQueryAsBeanReal(BeanQuerySource<BT, KT> objects) throws Exception {
+		return new QueryResultFetcherForEntity(datastoreService.prepare(createQuery(objects)));
 	}
 
 	@Override
-	protected QueryResultFetcher<Entity> executeQueryAsKeyReal() throws Exception {
-		return new QueryResultFetcherForEntity(datastoreService.prepare(createQuery().setKeysOnly()));
+	protected QueryResultFetcher<Entity> executeQueryAsKeyReal(BeanQuerySource<BT, KT> objects) throws Exception {
+		return new QueryResultFetcherForEntity(datastoreService.prepare(createQuery(objects).setKeysOnly()));
 	}
 
 	@Override

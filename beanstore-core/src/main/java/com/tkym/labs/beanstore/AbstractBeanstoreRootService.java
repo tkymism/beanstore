@@ -15,6 +15,9 @@ public abstract class AbstractBeanstoreRootService implements BeanstoreRootServi
 	public <BT, KT> BeanQuery<BT, KT> query(BeanMeta<BT, KT> meta) {
 		return createBeanQuery(meta,null);
 	}
-	protected abstract <BT, KT> AbstractBeanQuery<BT, KT> createBeanQuery(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent);
+	<BT, KT> DefaultBeanQuery<BT, KT> createBeanQuery(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent){
+		return new DefaultBeanQuery<BT, KT>(createBeanQueryExecutor(beanMeta, parent));
+	}
 	protected abstract <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent);
+	protected abstract <BT, KT> AbstractBeanQueryExecutor<BT, KT> createBeanQueryExecutor(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent);
 }

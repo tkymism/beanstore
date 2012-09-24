@@ -1,116 +1,110 @@
 package com.tkym.labs.beanstore;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
-import com.tkym.labs.beanmeta.KeyBuilder;
-import com.tkym.labs.beans.AccountMeta;
-import com.tkym.labs.beans.Bill;
-import com.tkym.labs.beans.BillMeta;
-import com.tkym.labs.beans.DataProvider;
-import com.tkym.labs.beans.PersonMeta;
+import com.tkym.labs.beanstore.api.BeanstoreTransaction;
 
 public class BeanstoreMemTest {
-	private static final ConcurrentSkipListMap<Key<Bill, Integer>, Bill> TEST_MAP = 
-			new ConcurrentSkipListMap<Key<Bill, Integer>, Bill>();
-	private static PersonMeta PERSON = PersonMeta.get();
-	private static AccountMeta ACCOUNT = AccountMeta.get();
-	private static BillMeta BILL = BillMeta.get();
-	private static final DecimalFormat FORMAT00 = new DecimalFormat("00");
-	private static final String email(int index){
-		return FORMAT00.format(index) + "@mail.com";
+	class BeanstoreServiceMem extends AbstractBeanstoreRootService{
+		private final BeanMemRepository repository;
+		BeanstoreServiceMem(BeanMemRepository repository) {
+			this.repository = repository;
+		}
+		@Override
+		public BeanstoreTransaction getTransaction() {
+			return null;
+		}
+		@Override
+		protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(
+				BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+			return new BeanstoreMem<BT,KT>(this, beanMeta, parent);
+		}
+		BeanMemRepository getBeanMemRepository(){
+			return this.repository;
+		}
+		@Override
+		protected <BT, KT> AbstractBeanQueryExecutor<BT, KT> createBeanQueryExecutor(
+				BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+			return null;
+		}
 	}
-	
-	@BeforeClass
-	public static void setupClass() {
-		for (long id = 0; id < 1000; id++)
-			for (int index = 0; index < 10; index++)
-				for (int no = 0; no < 10; no++)
-					TEST_MAP.put(
-							KeyBuilder.root()
-							.meta(PERSON).is(id)
-							.meta(ACCOUNT).is(email(index))
-							.meta(BILL).is(no).
-							build(),
-							DataProvider.create(id, index, no));
+	class BeanstoreMem<BT,KT> extends AbstractBeanstore<BT, KT>{
+		private final BeanMemMap<BT,KT> memmap;
+		BeanstoreMem(BeanstoreServiceMem rootService,
+				BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+			super(rootService, beanMeta, parent);
+			memmap = rootService.
+				getBeanMemRepository().
+				get(beanMeta);
+		}
+		@Override
+		protected BT getDelegate(KT value) throws Exception {
+			BeanMem<BT,KT> mem = memmap.get(key(value));
+			if (mem == null) 
+				return null;
+			else 
+				return mem.getValue();
+		}
+		@Override
+		protected void removeDelegate(KT key) throws Exception {
+			memmap.remove(key(key));
+		}
+		@Override
+		protected void putDelegate(KT key, BT bean) throws Exception {
+			memmap.put(new BeanMem<BT,KT>(key(key), bean));
+		}
 	}
-	
-	@Test
-	public void testCountData(){
-		assertThat(TEST_MAP.size(), is(100000));
+	class BeanMemRepository{
+		private Map<BeanMeta<?, ?>, BeanMemMap<?,?>> cachemap = 
+				new ConcurrentHashMap<BeanMeta<?,?>, BeanMemMap<?,?>>();
+		<BT,KT> BeanMemMap<BT,KT> get(BeanMeta<BT, KT> beanMeta){
+			@SuppressWarnings("unchecked")
+			BeanMemMap<BT,KT> map = (BeanMemMap<BT,KT>) cachemap.get(beanMeta);
+			if (map == null) {
+				map = new BeanMemMap<BT,KT>(beanMeta);
+				cachemap.put(beanMeta, map);
+			}
+			return map;
+		}
 	}
-	
-	@Test
-	public void testContainsSpeedTest(){
-		boolean error = false;
-		for (long id = 0; id < 1000; id++)
-			for (int index = 0; index < 10; index++)
-				for (int no = 0; no < 10; no++)
-					if (!TEST_MAP.containsKey(
-							KeyBuilder.root()
-							.meta(PERSON).is(id)
-							.meta(ACCOUNT).is(email(index))
-							.meta(BILL).is(no).
-							build()
-							)) error = true;
-		assertFalse(error);
+	class BeanMemMap<BT,KT>{
+		private final BeanMeta<BT, KT> beanMeta;
+		private ConcurrentSkipListMap<Key<BT, KT>, BeanMem<BT,KT>> memmap = 
+				new ConcurrentSkipListMap<Key<BT, KT>, BeanMem<BT,KT>>();
+		BeanMemMap(BeanMeta<BT, KT> beanMeta) {
+			this.beanMeta = beanMeta;
+		}
+		BeanMem<BT,KT> get(Key<BT, KT> key){
+			return memmap.get(key);
+		}
+		BeanMem<BT,KT> put(BeanMem<BT,KT> mem){
+			return memmap.put(mem.getKey(), mem);
+		}
+		BeanMem<BT,KT> remove(Key<BT, KT> key){
+			return memmap.remove(key);
+		}
+		public BeanMeta<BT, KT> getBeanMeta() {
+			return beanMeta;
+		}
 	}
-	
-	@Test
-	public void testGetSpeedTest(){
-		boolean error = false;
-		for (long id = 0; id < 1000; id++)
-			for (int index = 0; index < 10; index++)
-				for (int no = 0; no < 10; no++)
-					if (TEST_MAP.get(
-							KeyBuilder.root()
-							.meta(PERSON).is(id)
-							.meta(ACCOUNT).is(email(index))
-							.meta(BILL).is(no).
-							build()
-							) == null) error = true;
-		assertFalse(error);
+	class BeanMem<BT,KT>{
+		private final Key<BT, KT> key;
+		private final BT value;
+		BeanMem(Key<BT, KT> key, BT value) {
+			this.key = key;
+			this.value = value;
+		}
+		Key<BT, KT> getKey() {
+			return key;
+		}
+		BT getValue() {
+			return value;
+		}
 	}
-	
-	@Test
-	public void testRead_TEST_MAP(){
-		ConcurrentNavigableMap<Key<Bill, Integer>, Bill> head = 
-				TEST_MAP.headMap(
-				KeyBuilder.root().
-				meta(PERSON).is(500L).
-				meta(ACCOUNT).is(null).
-				meta(BILL).is(null).build());
-		assertThat(head.size(), is(TEST_MAP.size()/2));
-		for (Key<Bill, Integer> key : head.keySet())
-			assertTrue(500 > (Long) key.getParent().getParent().value());
-	}
-	
-	@Test
-	public void testRead_TEST_MAP002(){
-		ConcurrentNavigableMap<Key<Bill, Integer>, Bill> tail = 
-				TEST_MAP.tailMap(
-				KeyBuilder.root().
-				meta(PERSON).is(500L).
-				meta(ACCOUNT).is(null).
-				meta(BILL).is(null).build());
-		assertThat(tail.size(), is(TEST_MAP.size()/2));
-		for (Key<Bill, Integer> key : tail.keySet())
-			assertTrue(500 <= (Long) key.getParent().getParent().value());
-	}
-	
 //	public static class BeancacheRepository<PBT,PKT> {
 //		private final Key<PBT, PKT> parent;
 //		BeancacheRepository(Key<PBT, PKT> parent) {

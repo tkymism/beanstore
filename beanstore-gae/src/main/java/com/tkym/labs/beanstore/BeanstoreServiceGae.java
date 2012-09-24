@@ -19,17 +19,17 @@ class BeanstoreServiceGae extends AbstractBeanstoreRootService {
 	}
 
 	@Override
-	protected <BT, KT> AbstractBeanQuery<BT, KT> createBeanQuery(
-			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
-		return new BeanQueryGae<BT, KT>(beanMeta, parent, datastoreService);
-	}
-
-	@Override
 	protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(
 			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		return new BeanstoreGae<BT, KT>(this, beanMeta, parent, datastoreService);
 	}
 	DatastoreService getDatastoreService(){
 		return datastoreService;
+	}
+	
+	@Override
+	protected <BT, KT> AbstractBeanQueryExecutor<BT, KT> createBeanQueryExecutor(
+			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
+		return new BeanQueryExecutorGae<BT, KT>(beanMeta, parent, datastoreService);
 	}
 }

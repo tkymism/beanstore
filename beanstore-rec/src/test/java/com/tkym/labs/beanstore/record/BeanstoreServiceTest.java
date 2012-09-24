@@ -92,7 +92,7 @@ public class BeanstoreServiceTest {
 			}
 		}
 	}
-
+	
 	@Test
 	public void testQueryDataCase001() throws BeanstoreException{
 		List<Key<Person, Long>> personList = 
