@@ -50,17 +50,16 @@ public class BeanmemRepositoryTest {
 	}
 	
 	@Test
-	public void testSubMap001(){
+	public void testTraceParant(){
 		List<BeanMeta<?,?>> trace = BeanmemMap.traceParant(BILL, PERSON);
-		for (BeanMeta<?,?> meta : trace)
-			System.out.println(meta.getName());
+		trace.get(0).equals(AccountMeta.get());
+		trace.get(0).equals(BillMeta.get());
 	}
 	
 	@Test
 	public void testBeanMemRepositoryCase001(){
 
 	}
-	
 	static class BeanMemRepository{
 		private Map<BeanMeta<?, ?>, BeanmemMap<?,?>> cachemap = 
 				new ConcurrentHashMap<BeanMeta<?,?>, BeanmemMap<?,?>>();
@@ -74,55 +73,55 @@ public class BeanmemRepositoryTest {
 			return map;
 		}
 	}
-	static class BeanmemIndex<BT,KT,PT extends Comparable<PT>>{
+	static class BeanmemSorter<BT,KT,PT extends Comparable<PT>>{
 		private final SortedSet<Beanmem<BT,KT>> sortedSet;
 		private final PropertyMeta<BT, PT> propertyMeta;
 		private final BeanMeta<BT, KT> beanMeta;
 		private final Key<BT,KT> minkey;
 		private final Key<BT,KT> maxkey;
-		BeanmemIndex(BeanMeta<BT, KT> beanMeta, final PropertyMeta<BT, PT> propertyMeta){
+		BeanmemSorter(BeanMeta<BT, KT> beanMeta, final PropertyMeta<BT, PT> propertyMeta){
 			this(beanMeta, propertyMeta, new TreeSet<Beanmem<BT,KT>>());
 		}
-		BeanmemIndex(BeanMeta<BT, KT> beanMeta, final PropertyMeta<BT, PT> propertyMeta, SortedSet<Beanmem<BT,KT>> sortedSet){
+		BeanmemSorter(BeanMeta<BT, KT> beanMeta, final PropertyMeta<BT, PT> propertyMeta, SortedSet<Beanmem<BT,KT>> sortedSet){
 			this.propertyMeta = propertyMeta;
 			this.beanMeta = beanMeta;
 			this.sortedSet = sortedSet;
 			this.minkey = buildLimitKey(beanMeta, false);
 			this.maxkey = buildLimitKey(beanMeta, true);
 		}
-		BeanmemIndex<BT,KT,PT> add(Beanmem<BT,KT> mem){
+		BeanmemSorter<BT,KT,PT> add(Beanmem<BT,KT> mem){
 			this.sortedSet.add(mem);
 			return this;
 		}
-		BeanmemIndex<BT,KT,PT> addAll(Collection<Beanmem<BT,KT>> mems){
+		BeanmemSorter<BT,KT,PT> addAll(Collection<Beanmem<BT,KT>> mems){
 			this.sortedSet.addAll(mems);
 			return this;
 		}
-		BeanmemIndex<BT,KT,PT> remove(Beanmem<BT,KT> mem){
+		BeanmemSorter<BT,KT,PT> remove(Beanmem<BT,KT> mem){
 			this.sortedSet.remove(mem);
 			return this;
 		}
-		BeanmemIndex<BT,KT,PT> clear(){
+		BeanmemSorter<BT,KT,PT> clear(){
 			this.sortedSet.clear();
 			return this;
 		}
-		BeanmemIndex<BT,KT,PT> greaterThan(PT value){
-			return cloneIndex(sortedSet.headSet(createParamBeanmem(value, minkey)));
+		BeanmemSorter<BT,KT,PT> greaterThan(PT value){
+			return cloneSorter(sortedSet.headSet(createParamBeanmem(value, minkey)));
 		}
-		BeanmemIndex<BT,KT,PT> greaterEquals(PT value){
-			return cloneIndex(sortedSet.headSet(createParamBeanmem(value, maxkey)));
+		BeanmemSorter<BT,KT,PT> greaterEquals(PT value){
+			return cloneSorter(sortedSet.headSet(createParamBeanmem(value, maxkey)));
 		}
-		BeanmemIndex<BT,KT,PT> lessThan(PT value){
-			return cloneIndex(sortedSet.tailSet(createParamBeanmem(value, maxkey)));
+		BeanmemSorter<BT,KT,PT> lessThan(PT value){
+			return cloneSorter(sortedSet.tailSet(createParamBeanmem(value, maxkey)));
 		}
-		BeanmemIndex<BT,KT,PT> lessEquals(PT value){
-			return cloneIndex(sortedSet.tailSet(createParamBeanmem(value, minkey)));
+		BeanmemSorter<BT,KT,PT> lessEquals(PT value){
+			return cloneSorter(sortedSet.tailSet(createParamBeanmem(value, minkey)));
 		}
-		BeanmemIndex<BT,KT,PT> equalsTo(PT value){
+		BeanmemSorter<BT,KT,PT> equalsTo(PT value){
 			return greaterEquals(value).lessEquals(value);
 		}
-		private BeanmemIndex<BT,KT,PT> cloneIndex(SortedSet<Beanmem<BT,KT>> sortedSet){
-			return new BeanmemIndex<BT,KT,PT>(beanMeta, propertyMeta, sortedSet);
+		private BeanmemSorter<BT,KT,PT> cloneSorter(SortedSet<Beanmem<BT,KT>> sortedSet){
+			return new BeanmemSorter<BT,KT,PT>(beanMeta, propertyMeta, sortedSet);
 		}
 		private Beanmem<BT, KT> createParamBeanmem(PT value, Key<BT,KT> key){
 			BT bean = beanMeta.newInstance();
@@ -159,8 +158,8 @@ public class BeanmemRepositoryTest {
 		Beanmem<BT,KT> remove(Key<BT, KT> key){
 			return memmap.remove(key);
 		}
-		<PT extends Comparable<PT>> BeanmemIndex<BT, KT, PT> indexOf(PropertyMeta<BT, PT> property){
-			return new BeanmemIndex<BT, KT, PT>(beanMeta, property).addAll(memmap.values());
+		<PT extends Comparable<PT>> BeanmemSorter<BT, KT, PT> sorter(PropertyMeta<BT, PT> property){
+			return new BeanmemSorter<BT, KT, PT>(beanMeta, property).addAll(memmap.values());
 		}
 		ConcurrentNavigableMap<Key<BT, KT>, Beanmem<BT,KT>> sameParentMap(Key<?,?> parent){
 			Key<BT,KT> max = buildMaxKey(parent, this.beanMeta);

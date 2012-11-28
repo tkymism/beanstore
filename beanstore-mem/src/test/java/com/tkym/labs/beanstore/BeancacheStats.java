@@ -7,7 +7,7 @@ import com.tkym.labs.beanmeta.Key;
 public class BeancacheStats<BT,KT>{
 	private final Key<BT, KT> key;
 	private final BT bean;
-	private Date attacheTime = new Date();
+	private Date attachTime = new Date();
 	private Date usingTime = new Date();
 	BeancacheStats(Key<BT, KT> key, BT bean){
 		this.key = key;
@@ -53,7 +53,7 @@ public class BeancacheStats<BT,KT>{
 		return true;
 	}
 	Date whenAttach(){
-		return this.attacheTime;
+		return this.attachTime;
 	}
 	Date whenUsing(){
 		return this.usingTime;

@@ -132,7 +132,6 @@ public class BeanstoreMemTest {
 			return cachemap;
 		}
 	}
-	
 	class BeancacheStore<BT, KT> {
 		private ConcurrentSkipListMap<Key<BT, KT>, BeancacheStats<BT, KT>> keymap = 
 				new ConcurrentSkipListMap<Key<BT, KT>, BeancacheStats<BT, KT>>();
