@@ -15,13 +15,14 @@ import com.tkym.labs.beanmeta.PropertyMeta;
 
 public class BeanmemFrameworkTest {
 	static class BeanChainedComparator<BT,PT extends Comparable<PT>> implements Comparator<BT>{
-		private BeanChainedComparator<BT,?> parentComparator = null;
+		private final BeanChainedComparator<BT,?> parentComparator;
 		private final PropertyMeta<BT, PT> propertyMeta;
 		BeanChainedComparator(PropertyMeta<BT, PT> propertyMeta){
-			this.propertyMeta = propertyMeta;
+			this(null, propertyMeta);
 		}
-		<T extends Comparable<T>> void setParent(BeanChainedComparator<BT,T> parent){
-			parentComparator = parent;
+		BeanChainedComparator(BeanChainedComparator<BT, ?> parentComparator, PropertyMeta<BT, PT> propertyMeta){
+			this.parentComparator = parentComparator;
+			this.propertyMeta = propertyMeta;
 		}
 		@Override
 		public int compare(BT o1, BT o2) {

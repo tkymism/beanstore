@@ -31,19 +31,22 @@ public class BeanstoreInterfaceTest {
 		PersonMeta PERSON = PersonMeta.get();
 		AccountMeta ACCOUNT = AccountMeta.get();
 		Iterator<Key<Person,Long>> ite = 
-				service.query(PERSON).filter(PERSON.name).startsWith("foo").sort(PERSON.name).asc().key().asIterator();
-		
+				service.query(PERSON).
+					filter(PERSON.name).startsWith("foo").
+					sort(PERSON.name).asc().
+					key().
+					asIterator();
 		while(ite.hasNext()){
 			BeanstoreService<Person,Long> personService = 
 					service.store(PERSON).is(ite.next().value());
 			
-			List<Account> list = 
+			List<Account> accountList = 
 					personService.query(ACCOUNT).
 					filter(ACCOUNT.email).endsWith("yahoo.co.jp").
 					sort(ACCOUNT.address).asc().
 					bean().asList();
 			
-			for (Account account : list){
+			for (Account account : accountList){
 				account.setEmail("--");
 				personService.store(ACCOUNT).put(account);
 			}
