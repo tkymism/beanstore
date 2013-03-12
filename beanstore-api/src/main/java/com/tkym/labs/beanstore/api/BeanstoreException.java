@@ -1,7 +1,7 @@
 package com.tkym.labs.beanstore.api;
 
 @SuppressWarnings("serial")
-public class BeanstoreException extends Exception{
+public class BeanstoreException extends RuntimeException{
 	public BeanstoreException() {
 		super();
 	}

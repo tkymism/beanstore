@@ -21,11 +21,9 @@ public class BeanmemTest {
 	private static final PersonMeta PERSON = PersonMeta.get();
 	private static final AccountMeta ACCOUNT = AccountMeta.get();
 	private static final BillMeta BILL = BillMeta.get();
-	
 	@Test
 	public void testBeanmemKeyValueMapCase001(){
 	}
-	
 	class BeanmemRepository{
 		private final ConcurrentHashMap<BeanMeta<?, ?>, BeanmemMap<?,?>> maps = 
 			new ConcurrentHashMap<BeanMeta<?,?>, BeanmemMap<?,?>>();
@@ -39,7 +37,6 @@ public class BeanmemTest {
 			return map;
 		}
 	}
-	
 	static class BeanMetaComparator<BT,PT extends Comparable<PT>> implements Comparator<BT>{
 		private final BeanMetaComparator<BT,?> parentComparator;
 		private final PropertyMeta<BT, PT> propertyMeta;

@@ -26,7 +26,7 @@ public class BeanstoreRootServiceRecord extends AbstractBeanstoreRootService{
 		recordstoreService.drop(BeanMetaResolverProvider.getInstance().get(beanMeta).getTableMeta(), false);
 	}
 	@Override
-	public BeanstoreTransaction getTransaction() {
+	public BeanstoreTransaction transaction() {
 		return transaction;
 	}
 	

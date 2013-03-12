@@ -23,7 +23,7 @@ public class IyakuhinTest {
 //	@AfterClass
 	public static void teardownClass() throws Exception {
 //		service.drop(IYAKUHIN);
-		service.getTransaction().close();
+		service.transaction().close();
 	}
 	
 //	@Test
@@ -31,7 +31,7 @@ public class IyakuhinTest {
 		List<Iyakuhin> list =  CsvDataProvider.get().iyakuhinList();
 		for (Iyakuhin bean : list)
 			service.store(IYAKUHIN).put(bean);
-		service.getTransaction().commit();
+		service.transaction().commit();
 	}
 	
 //	@Test

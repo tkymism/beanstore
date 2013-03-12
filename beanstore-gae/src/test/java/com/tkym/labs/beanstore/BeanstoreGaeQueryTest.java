@@ -62,13 +62,13 @@ public class BeanstoreGaeQueryTest {
     	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(10L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(11L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(12L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(13L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	List<Key<Person,Long>> keyList = 
     			service.
     			query(PERSON).
@@ -86,13 +86,13 @@ public class BeanstoreGaeQueryTest {
     	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(10L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(11L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(12L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(23L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	List<Key<Person,Long>> keyList = service.query(PersonMeta.get()).key().asList();
     	assertThat(keyList.size(), is(4));
     	List<Person> fooList = service.query(PERSON).
@@ -106,13 +106,13 @@ public class BeanstoreGaeQueryTest {
     	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(10L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(11L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(12L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(23L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	List<Key<Person,Long>> keyList = service.query(PersonMeta.get()).key().asList();
     	assertThat(keyList.size(), is(4));
     	List<Person> fooList = service.query(PERSON).
@@ -126,13 +126,13 @@ public class BeanstoreGaeQueryTest {
     	BeanstoreService<Void,Void> service = factory.create();
     	PersonMeta PERSON = PersonMeta.get();
     	service.store(PERSON).put(person(9L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(11L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(12L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(23L));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	List<Key<Person,Long>> keyList = service.query(PersonMeta.get()).key().asList();
     	assertThat(keyList.size(), is(4));
     	List<Person> fooList = service.query(PERSON).
@@ -149,11 +149,11 @@ public class BeanstoreGaeQueryTest {
     	service.store(PERSON).put(person(1L));
     	service.store(PERSON).is(1L).store(ACCOUNT).put(account("abc"));
     	service.store(PERSON).is(1L).store(ACCOUNT).put(account("def"));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(2L));
     	service.store(PERSON).is(2L).store(ACCOUNT).put(account("abc"));
     	service.store(PERSON).is(2L).store(ACCOUNT).put(account("def"));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	List<Key<Account,String>> keyList = service.query(ACCOUNT).key().asList();
     	assertThat(keyList.size(), is(4));
     	List<Account> aList = service.query(ACCOUNT).
@@ -175,11 +175,11 @@ public class BeanstoreGaeQueryTest {
     	service.store(PERSON).put(person(3L));
     	service.store(PERSON).is(3L).store(ACCOUNT).put(account("abc"));
     	service.store(PERSON).is(3L).store(ACCOUNT).put(account("def"));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	service.store(PERSON).put(person(4L));
     	service.store(PERSON).is(4L).store(ACCOUNT).put(account("abc"));
     	service.store(PERSON).is(4L).store(ACCOUNT).put(account("def"));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	List<Account> list = service.store(PERSON).is(4L).query(ACCOUNT).filter(ACCOUNT.address).startsWith("def").bean().asList();
     	assertThat(list.size(), is(1));
     }
@@ -198,10 +198,10 @@ public class BeanstoreGaeQueryTest {
     	
     	bs3.put(account("abc"));
     	bs3.put(account("def"));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	bs4.put(account("abc"));
     	bs4.put(account("def"));
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	
     	List<Account> list = 
     			service.query(ACCOUNT).
@@ -210,7 +210,7 @@ public class BeanstoreGaeQueryTest {
     	
     	assertThat(list.size(), is(2));
     	
-    	service.getTransaction().commit();
+    	service.transaction().commit();
     	
     	List<Account> list2 = 
     			service.query(ACCOUNT).

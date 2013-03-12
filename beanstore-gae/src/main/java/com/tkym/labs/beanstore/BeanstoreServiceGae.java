@@ -14,7 +14,7 @@ class BeanstoreServiceGae extends AbstractBeanstoreRootService {
 	}
 
 	@Override
-	public BeanstoreTransaction getTransaction() {
+	public BeanstoreTransaction transaction() {
 		return this.transaction;
 	}
 

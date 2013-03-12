@@ -33,7 +33,7 @@ public class DefaultBeanstoreService<PB,PK> implements BeanstoreService<PB,PK>{
 							parent.getBeanMeta().getBeanType().getName());
 	}
 	@Override
-	public BeanstoreTransaction getTransaction() {
-		return rootService.getTransaction();
+	public BeanstoreTransaction transaction() {
+		return rootService.transaction();
 	}
 }

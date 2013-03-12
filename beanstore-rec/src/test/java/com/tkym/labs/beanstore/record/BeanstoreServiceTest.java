@@ -71,7 +71,7 @@ public class BeanstoreServiceTest {
 		service.drop(PersonMeta.get());
 		service.drop(AccountMeta.get());
 		service.drop(BillMeta.get());
-		service.getTransaction().close();
+		service.transaction().close();
 	}
 	
 	@Test

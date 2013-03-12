@@ -8,6 +8,6 @@ public interface BeanQuery<BT,KT> {
 	public <PT> BeanFilterBuilder<BT,KT,PT> filter(PropertyMeta<BT,PT> meta);
 	public BeanQuery<BT,KT> sort(BeanSortCriteria criteria);
 	public <PT> BeanSortBuilder<BT,KT> sort(PropertyMeta<BT,PT> meta);
-	public BeanQueryResult<BT> bean() throws BeanstoreException;
-	public BeanQueryResult<Key<BT,KT>> key() throws BeanstoreException;
+	public BeanQueryResult<BT> bean();
+	public BeanQueryResult<Key<BT,KT>> key();
 }

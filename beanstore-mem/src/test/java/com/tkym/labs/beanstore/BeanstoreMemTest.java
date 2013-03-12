@@ -69,7 +69,6 @@ public class BeanstoreMemTest {
 			this.sorts.add(sort);
 			return this;
 		}
-		
 		@SuppressWarnings("unchecked")
 		@Override
 		public QueryResultFetcher<BT> executeQueryAsBean(BeanQuerySource<BT, KT> objects) throws Exception {
@@ -94,7 +93,7 @@ public class BeanstoreMemTest {
 			this.memmaps = memmapstore;
 		}
 		@Override
-		public BeanstoreTransaction getTransaction() {
+		public BeanstoreTransaction transaction() {
 			return null;
 		}
 		@Override
