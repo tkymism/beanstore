@@ -57,12 +57,12 @@ public class BeanstoreInterfaceTest {
 		BeanstoreRootService service = factory.create();
 		GenerationMeta GENE = GenerationMeta.get();
 		Iterator<Key<Generation, Integer>> ite = 
-			service.query(GENE.suffix("201204")).
+			service.query(GENE.s("201204")).
 				filter(GENE.name).startsWith("hoge000").
 				sort(GENE.name).asc().
 				key().asIterator();
 		while(ite.hasNext())
-			service.store(GENE.suffix("201204")).
+			service.store(GENE.s("201204")).
 					get(ite.next().value());
 	}
 }
