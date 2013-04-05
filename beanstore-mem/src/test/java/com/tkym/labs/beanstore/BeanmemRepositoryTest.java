@@ -17,7 +17,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tkym.labs.beanmeta.BeanMeta;
-import com.tkym.labs.beanmeta.BeanMetaUtils;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
 import com.tkym.labs.beanmeta.PropertyMeta;
@@ -56,11 +55,11 @@ public class BeanmemRepositoryTest {
 				for (int no = 0; no < 10; no++)
 					REPO.get(BILL).put(
 							new MemEntity<Bill, Integer>(
-								KeyBuilder.root()
-								.meta(PERSON).is(id)
-								.meta(ACCOUNT).is(email(index))
-								.meta(BILL).is(no).
-								build(),
+								KeyBuilder.root().
+									meta(PERSON).is(id).
+									meta(ACCOUNT).is(email(index)).
+									meta(BILL).is(no).
+									build(),
 								createBill(id, index, no)));
 	}
 	@Test
@@ -225,7 +224,8 @@ public class BeanmemRepositoryTest {
 			return memmap.remove(key);
 		}
 		<PT extends Comparable<PT>> MemEntitySorter<BT, KT, PT> sortAs(PropertyMeta<BT, PT> property){
-			return new MemEntitySorter<BT, KT, PT>(beanMeta, property).addAll(memmap.values());
+			Collection<MemEntity<BT,KT>> values = memmap.values();
+			return new MemEntitySorter<BT, KT, PT>(beanMeta, property).addAll(values);
 		}
 		ConcurrentNavigableMap<Key<BT, KT>, MemEntity<BT,KT>> sameParentMap(Key<?,?> parent){
 			Key<BT,KT> max = buildMaxKey(parent, this.beanMeta);
