@@ -17,7 +17,7 @@ import com.tkym.labs.beans.BeanBuilder.HogeBuilder;
 import com.tkym.labs.beans.Hoge;
 import com.tkym.labs.beans.HogeMeta;
 
-public class BeancacheTest {
+public class BeancacheIndexTest {
 	private static HogeMeta HOGE = HogeMeta.get();
 	@Test
 	public void testBeancacheIndex_headIndex(){

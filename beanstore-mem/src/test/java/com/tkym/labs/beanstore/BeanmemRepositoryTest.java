@@ -62,6 +62,7 @@ public class BeanmemRepositoryTest {
 									build(),
 								createBill(id, index, no)));
 	}
+	
 	@Test
 	public void testTraceParant(){
 		List<BeanMeta<?,?>> trace = MemEntityMap.traceParant(BILL, PERSON);
