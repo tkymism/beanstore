@@ -153,6 +153,7 @@ public class BeanmemTest2 {
 		}
 	}
 	static class BeanmemMap<BT, KT>{
+		@SuppressWarnings("unused")
 		private final BeanMeta<BT, KT> beanMeta;
 		private final ConcurrentHashMap<Key<BT, KT>, Beanmem<BT,KT>> hashMap;
 		BeanmemMap(BeanMeta<BT, KT> beanMeta){

@@ -13,9 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
@@ -32,7 +29,7 @@ import com.tkym.labs.beanstore.api.BeanQuerySource;
 import com.tkym.labs.beanstore.api.BeanSort;
 import com.tkym.labs.beanstore.api.BeanSortCriteria;
 
-public class BeanmemRepositoryTest {
+public class BeanmemRepository__ {
 	private static PersonMeta PERSON = PersonMeta.get();
 	private static AccountMeta ACCOUNT = AccountMeta.get();
 	private static BillMeta BILL = BillMeta.get();
@@ -48,7 +45,6 @@ public class BeanmemRepositoryTest {
 		return b;
 	}
 	
-	@BeforeClass
 	public static void setupClass() {
 		for (long id = 0; id < 1000; id++)
 			for (int index = 0; index < 10; index++)
@@ -63,14 +59,13 @@ public class BeanmemRepositoryTest {
 								createBill(id, index, no)));
 	}
 	
-	@Test
 	public void testTraceParant(){
 		List<BeanMeta<?,?>> trace = MemEntityMap.traceParant(BILL, PERSON);
 		trace.get(0).equals(AccountMeta.get());
 		trace.get(0).equals(BillMeta.get());
 	}
-	@Test
 	public void testBeanMemRepositoryCase001(){
+		@SuppressWarnings("unused")
 		int count = 0;
 		for (MemEntity<Bill,Integer> entity : REPO.get(BILL).memmap.values())
 			if (entity.getBean().getAmount() > 30000.0f && entity.getBean().getAmount() < 50000.0f)
@@ -82,6 +77,7 @@ public class BeanmemRepositoryTest {
 			asSet();
 	}
 	class BeanQueryExecutorMem<BT, KT> extends AbstractBeanQueryExecutor<BT, KT>{
+		@SuppressWarnings("unused")
 		private final MemEntityMap<BT, KT> sourceMap;
 		private final List<BeanFilter<BT, ?>> filters = new ArrayList<BeanFilter<BT,?>>();
 		private final List<BeanSort<BT, ?>> sorts = new ArrayList<BeanSort<BT,?>>();
