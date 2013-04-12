@@ -15,12 +15,12 @@ public class DefaultBeanstoreService<PB,PK> implements BeanstoreService<PB,PK>{
 		this.parent = parent;
 	}
 	@Override
-	public <BT, KT> BeanQuery<BT, KT> query(BeanMeta<BT, KT> meta) {
+	public <BT, KT extends Comparable<KT>> BeanQuery<BT, KT> query(BeanMeta<BT, KT> meta) {
 		checkMeta(meta);
 		return rootService.createBeanQuery(meta, parent);
 	}
 	@Override
-	public final <BT, KT> Beanstore<BT, KT> store(BeanMeta<BT, KT> meta) {
+	public final <BT, KT extends Comparable<KT>> Beanstore<BT, KT> store(BeanMeta<BT, KT> meta) {
 		checkMeta(meta);
 		return rootService.createBeanstore(meta, parent);
 	}

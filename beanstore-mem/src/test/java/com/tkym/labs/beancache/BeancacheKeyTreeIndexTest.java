@@ -368,4 +368,17 @@ public class BeancacheKeyTreeIndexTest {
 			assertTrue(v <= 3L);
 		}
 	}
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSubKeyIndexCase005(){
+		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+				BILL_IDX.child(
+						KeyBuilder.root().meta(PERSON).is(2L).build()
+						);
+		assertThat(sub.navigableSet().size(), is(1*ACCOUNT_SIZE*BILL_SIZE));
+		for (Key<Bill, Integer> b : sub.navigableSet()){
+			long v = ((Key<Person,Long>) b.getParent().getParent()).value(); 
+			assertTrue(v == 2L);
+		}
+	}
 }

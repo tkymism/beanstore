@@ -8,14 +8,14 @@ import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
 import com.tkym.labs.beanmeta.KeyComparator;
 
-public class BeancacheKeyTreeIndex<BT,KT extends Comparable<KT>>{
+class BeancacheKeyTreeIndex<BT,KT extends Comparable<KT>>{
 	private final NavigableSet<Key<BT, KT>> navigableSet;
 	private final BeanMeta<BT, KT> beanMeta;
 	private BeancacheKeyTreeIndex(BeanMeta<BT, KT> beanMeta, NavigableSet<Key<BT, KT>> navigableSet) {
 		this.beanMeta = beanMeta;
 		this.navigableSet = navigableSet;
 	}
-	public BeancacheKeyTreeIndex(BeanMeta<BT, KT> beanMeta) {
+	BeancacheKeyTreeIndex(BeanMeta<BT, KT> beanMeta) {
 		this(beanMeta, new ConcurrentSkipListSet<Key<BT, KT>>(KeyComparator.comparator(beanMeta)));
 	}
 	BeancacheKeyTreeIndex<BT,KT> copy(NavigableSet<Key<BT, KT>> navigableMap){
@@ -36,16 +36,19 @@ public class BeancacheKeyTreeIndex<BT,KT extends Comparable<KT>>{
 			boolean fromInclusive, Key<BT,KT> to, boolean toInclusive) {
 		return copy(navigableSet.subSet((Key<BT, KT>) from, fromInclusive, (Key<BT, KT>) to, toInclusive));
 	}
-	public BeancacheKeyTreeIndex<BT,KT> tailKeyIndex(Key<?,?> from, boolean inclusive) {
+	BeancacheKeyTreeIndex<BT,KT> tailKeyIndex(Key<?,?> from, boolean inclusive) {
 		return copy(navigableSet.tailSet(chainForTail(from, inclusive), inclusive));
 	}
-	public BeancacheKeyTreeIndex<BT,KT> headKeyIndex(Key<?,?> to, boolean inclusive) {
+	BeancacheKeyTreeIndex<BT,KT> headKeyIndex(Key<?,?> to, boolean inclusive) {
 		return copy(navigableSet.headSet(chainForHead(to, inclusive), inclusive));
 	}
-	public BeancacheKeyTreeIndex<BT,KT> subKeyIndex(Key<?,?> from, boolean fromInclusive, Key<?,?> to, boolean toInclusive) {
+	BeancacheKeyTreeIndex<BT,KT> subKeyIndex(Key<?,?> from, boolean fromInclusive, Key<?,?> to, boolean toInclusive) {
 		return copy(navigableSet.subSet(
 				chainForTail(from, fromInclusive), fromInclusive, 
 				chainForHead(to, toInclusive), toInclusive));
+	}
+	BeancacheKeyTreeIndex<BT,KT> child(Key<?,?> parent) {
+		return subKeyIndex(parent, true, parent, true);
 	}
 	private Key<BT,KT> chainForHead(Key<?,?> parent, boolean inclusive){
 		if (inclusive) return chainMaxKeyFor(parent);

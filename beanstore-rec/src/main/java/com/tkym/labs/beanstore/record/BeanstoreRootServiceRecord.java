@@ -31,12 +31,12 @@ public class BeanstoreRootServiceRecord extends AbstractBeanstoreRootService{
 	}
 	
 	@Override
-	protected <BT, KT> AbstractBeanstore<BT, KT> createBeanstore(
+	protected <BT, KT extends Comparable<KT>> AbstractBeanstore<BT, KT> createBeanstore(
 			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		return new BeanstoreRecord<BT, KT>(this, beanMeta, parent);
 	}
 	@Override
-	protected <BT, KT> AbstractBeanQueryExecutor<BT, KT> createBeanQueryExecutor(
+	protected <BT, KT extends Comparable<KT>> AbstractBeanQueryExecutor<BT, KT> createBeanQueryExecutor(
 			BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 		return new BeanQueryExecutorRecord<BT, KT>(recordstoreService, beanMeta, parent);
 	}

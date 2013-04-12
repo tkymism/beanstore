@@ -10,7 +10,7 @@ import com.tkym.labs.record.RecordKey;
 import com.tkym.labs.record.RecordKey.RecordKeyBuilder;
 import com.tkym.labs.record.RecordstoreService;
 
-class BeanstoreRecord<BT, KT> extends AbstractBeanstore<BT, KT>{
+class BeanstoreRecord<BT, KT extends Comparable<KT>> extends AbstractBeanstore<BT, KT>{
 	private final RecordstoreService recordstoreService;
 	private final RecordKeyBuilder keyBuilder;
 	private final BeanMetaResolver<BT,KT> beanMetaResolver;

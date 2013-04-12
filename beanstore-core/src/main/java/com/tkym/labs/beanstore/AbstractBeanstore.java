@@ -6,7 +6,7 @@ import com.tkym.labs.beanstore.api.Beanstore;
 import com.tkym.labs.beanstore.api.BeanstoreException;
 import com.tkym.labs.beanstore.api.BeanstoreService;
 
-public abstract class AbstractBeanstore<BT, KT> implements Beanstore<BT, KT>{
+public abstract class AbstractBeanstore<BT, KT extends Comparable<KT>> implements Beanstore<BT, KT>{
 	protected final AbstractBeanstoreRootService beanstoreServiceRoot;
 	protected final BeanMeta<BT, KT> beanMeta;
 	protected final Key<?,?> parent;

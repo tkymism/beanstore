@@ -6,7 +6,7 @@ import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.PropertyMeta;
 
-class BeanstoreGae<BT,KT> extends AbstractBeanstore<BT,KT> {
+class BeanstoreGae<BT,KT extends Comparable<KT>> extends AbstractBeanstore<BT,KT> {
 	private final DatastoreService datastoreService;
 	private final KeyConverter<BT,KT> converter;
 	protected BeanstoreGae(AbstractBeanstoreRootService rootService, BeanMeta<BT,KT> beanMeta, Key<?, ?> parent, DatastoreService datastoreService) {
