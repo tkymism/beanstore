@@ -1,6 +1,8 @@
 package com.tkym.labs.beanstore;
 
 import static com.tkym.labs.beanstore.api.BeanQueryUtils.property;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -9,10 +11,9 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tkym.labs.beancache.Beancache;
+import com.tkym.labs.beancache.BeancacheIndex;
+import com.tkym.labs.beancache.BeancacheQuery;
 import com.tkym.labs.beancache.BeancacheRepository;
-import com.tkym.labs.beancache.BeancacheScaner;
-import com.tkym.labs.beancache.BeancacheScaner.BeancacheComparableProperty;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
@@ -22,13 +23,8 @@ import com.tkym.labs.beans.Bill;
 import com.tkym.labs.beans.BillMeta;
 import com.tkym.labs.beans.Person;
 import com.tkym.labs.beans.PersonMeta;
-import com.tkym.labs.beanstore.api.BeanCriteriaBuilder;
 import com.tkym.labs.beanstore.api.BeanFilter;
-import com.tkym.labs.beanstore.api.BeanFilter.BeanFilterOperator;
-import com.tkym.labs.beanstore.api.BeanFilterBuilder;
 import com.tkym.labs.beanstore.api.BeanFilterCriteria;
-import com.tkym.labs.beanstore.api.BeanQueryUtils;
-import com.tkym.labs.beanstore.api.BeanQueryBuilder.BeanFilterBuildHelper;
 
 public class BeancacheFilterCriteriaProcesserTest {
 	private static final int PERSON_SIZE = 100;
@@ -91,55 +87,117 @@ public class BeancacheFilterCriteriaProcesserTest {
 	
 	static <BT,KT extends Comparable<KT>> 
 		BeancacheFilterCriteriaProcesser<BT,KT> processer(BeanMeta<BT, KT> beanMeta){
-		return new BeancacheFilterCriteriaProcesser<BT,KT>(REPO.get(beanMeta).scan()); 
+		return new BeancacheFilterCriteriaProcesser<BT,KT>(REPO.get(beanMeta).query()); 
 	}
 	
 	@Test
 	public void testEqualsCase001(){
 		Set<Key<Person, Long>> r = 
 				processer(PERSON).
-				processFilter(property(PERSON.name).equalsTo("a00001")).
-				scaner().keySet();
-		
+				filters(property(PERSON.name).equalsTo("a00001")).
+				asKeySet();
+		assertThat(r.size(), is(1));
+	}
+	
+	@Test
+	public void testEqualsCase002(){
+		Set<Key<Person, Long>> r = 
+				processer(PERSON).
+				filters(property(PERSON.name).lessThan("a00001")).
+				asKeySet();
+		assertThat(r.size(), is(1));
+	}
+	
+	@Test
+	public void testEqualsCase003(){
+		Set<Key<Person, Long>> r = 
+				processer(PERSON).
+				filters(property(PERSON.name).lessEqual("a00001")).
+				asKeySet();
+		assertThat(r.size(), is(2));
+	}
+	
+	@Test
+	public void testEqualsCase004(){
+		Set<Key<Person, Long>> r = 
+				processer(PERSON).
+				filters(property(PERSON.name).greaterThan("a00001")).
+				asKeySet();
+		assertThat(r.size(), is(98));
+	}
+	
+	@Test
+	public void testEqualsCase005(){
+		Set<Key<Person, Long>> r = 
+				processer(PERSON).
+				filters(property(PERSON.name).greaterEqual("a00001")).
+				asKeySet();
+		assertThat(r.size(), is(99));
 	}
 	
 	static class BeancacheFilterCriteriaProcesser<BT, KT extends Comparable<KT>>{
-		private final BeancacheScaner<BT, KT> beancacheScaner;
-		BeancacheFilterCriteriaProcesser(BeancacheScaner<BT, KT> beancacheScaner) {
-			this.beancacheScaner = beancacheScaner;
+		private final BeancacheQuery<BT, KT> beancacheIndex;
+		BeancacheFilterCriteriaProcesser(BeancacheQuery<BT, KT> beancacheScaner) {
+			this.beancacheIndex = beancacheScaner;
 		}
-		BeancacheScaner<BT, KT> scaner(){
-			return this.beancacheScaner;
+		Set<Key<BT,KT>> asKeySet(){
+			return this.beancacheIndex.keySet();
 		}
-		void filters(List<BeanFilterCriteria> filters){
+		BeancacheQuery<BT, KT> scaner(){
+			return this.beancacheIndex;
+		}
+		BeancacheFilterCriteriaProcesser<BT, KT> filters(List<BeanFilterCriteria> filters){
 			for (BeanFilterCriteria criteria : filters) processFilter(criteria);
+			return this;
 		}
+		BeancacheFilterCriteriaProcesser<BT, KT> filters(BeanFilterCriteria... filters){
+			for (BeanFilterCriteria criteria : filters) processFilter(criteria);
+			return this;
+		}
+		@SuppressWarnings("unchecked")
 		BeancacheFilterCriteriaProcesser<BT, KT> processFilter(BeanFilterCriteria criteria){
-			throw new UnsupportedOperationException(
+			if (criteria instanceof BeanFilter)
+				return processFilter((BeanFilter<BT, KT>) criteria);
+			else
+				throw new UnsupportedOperationException(
 					"unsupport processFilter(BeanFilterCriteria criteria)");
 		}
 		/**
-		 * 		EQUAL,
-		NOT_EQUAL,
-		LESS_THAN_OR_EQUAL,
-		LESS_THAN,
-		GREATER_THAN_OR_EQUAL,
-		GREATER_THAN,
-		IN,
 		START_WITH,
 		END_WITH,
 		CONTAIN
 		 * @param filter
 		 * @return
 		 */
-//		<PT extends Comparable<PT>> BeancacheFilterCriteriaProcesser<BT, KT> processFilter(BeanFilter<BT,PT> filter){
-//			BeancacheComparableProperty<BT, KT, PT> scanProperty =
-//					this.beancacheScaner.comparable(filter.getMeta());
-//			switch (filter.getOperator()) {
-//			case EQUAL: return scanProperty.sub(filter, fromInclusive, to, toInclusive);
-//			default:
-//				break;
-//			}
-//		}
+		<PT extends Comparable<PT>> BeancacheFilterCriteriaProcesser<BT, KT> processFilter(BeanFilter<BT,PT> filter){
+			BeancacheIndex<BT, KT, PT> propertyIndex = 
+				this.beancacheIndex.property(filter.getMeta());
+			switch (filter.getOperator()) {
+			case EQUAL: 
+				propertyIndex.equalsTo(filter.value());
+				return this;
+			case NOT_EQUAL: 
+				propertyIndex.notEqualsTo(filter.value());
+				return this;
+			case GREATER_THAN: 
+				propertyIndex.greaterThan(filter.value());
+				return this;
+			case GREATER_THAN_OR_EQUAL: 
+				propertyIndex.greaterEqual(filter.value());
+				return this;
+			case LESS_THAN: 
+				propertyIndex.lessThan(filter.value());
+				return this;
+			case LESS_THAN_OR_EQUAL: 
+				propertyIndex.lessEqual(filter.value());
+				return this;
+			case IN: 
+				propertyIndex.in(filter.getValues());
+				return this;
+			default:
+				throw new UnsupportedOperationException(
+						"unsupport Operation:"+filter.getOperator());
+			}
+		}
 	}
 }

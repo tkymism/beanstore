@@ -1,7 +1,7 @@
 package com.tkym.labs.beancache;
 
-import static com.tkym.labs.beancache.BeancacheKeyTreeIndex.chainKeyAsMax;
-import static com.tkym.labs.beancache.BeancacheKeyTreeIndex.chainKeyAsMin;
+import static com.tkym.labs.beancache.___BeancacheKeyTreeIndex___.chainKeyAsMax;
+import static com.tkym.labs.beancache.___BeancacheKeyTreeIndex___.chainKeyAsMin;
 import static junit.framework.Assert.assertSame;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,19 +24,20 @@ import com.tkym.labs.beans.HogeMeta;
 import com.tkym.labs.beans.Person;
 import com.tkym.labs.beans.PersonMeta;
 
-public class BeancacheKeyTreeIndexTest {
+@SuppressWarnings("deprecation")
+public class ___BeancacheKeyTreeIndexTest___ {
 	private static final int PERSON_SIZE = 100;
 	private static final int ACCOUNT_SIZE = 10;
 	private static final int BILL_SIZE = 100;
 	private static final PersonMeta PERSON = PersonMeta.get();
 	private static final AccountMeta ACCOUNT = AccountMeta.get();
 	private static final BillMeta BILL = BillMeta.get();
-	private static final BeancacheKeyTreeIndex<Person,Long> PERSON_IDX 
-		= new BeancacheKeyTreeIndex<Person, Long>(PERSON); 
-	private static final BeancacheKeyTreeIndex<Account,String> ACCOUNT_IDX
-		= new BeancacheKeyTreeIndex<Account, String>(ACCOUNT); 
-	private static final BeancacheKeyTreeIndex<Bill,Integer> BILL_IDX
-		= new BeancacheKeyTreeIndex<Bill, Integer>(BILL); 
+	private static final ___BeancacheKeyTreeIndex___<Person,Long> PERSON_IDX 
+		= new ___BeancacheKeyTreeIndex___<Person, Long>(PERSON); 
+	private static final ___BeancacheKeyTreeIndex___<Account,String> ACCOUNT_IDX
+		= new ___BeancacheKeyTreeIndex___<Account, String>(ACCOUNT); 
+	private static final ___BeancacheKeyTreeIndex___<Bill,Integer> BILL_IDX
+		= new ___BeancacheKeyTreeIndex___<Bill, Integer>(BILL); 
 	@BeforeClass
 	public static void setupClass(){
 		for (int i=0; i<PERSON_SIZE; i++){
@@ -67,7 +68,7 @@ public class BeancacheKeyTreeIndexTest {
 	
 	@Test
 	public void testSubIndexPERSON_Case001(){
-		BeancacheKeyTreeIndex<Person, Long> sub =
+		___BeancacheKeyTreeIndex___<Person, Long> sub =
 				PERSON_IDX.subIndex(
 				KeyBuilder.root().meta(PERSON).is(1L).build(), true, 
 				KeyBuilder.root().meta(PERSON).is(2L).build(), true);
@@ -76,7 +77,7 @@ public class BeancacheKeyTreeIndexTest {
 	
 	@Test
 	public void testSubIndexACCOUNT_Case001(){
-		BeancacheKeyTreeIndex<Account, String> sub =
+		___BeancacheKeyTreeIndex___<Account, String> sub =
 				ACCOUNT_IDX.subIndex(
 				KeyBuilder.root().meta(PERSON).is(1L).meta(ACCOUNT).min().build(), true, 
 				KeyBuilder.root().meta(PERSON).is(2L).meta(ACCOUNT).max().build(), true);
@@ -85,7 +86,7 @@ public class BeancacheKeyTreeIndexTest {
 	
 	@Test
 	public void testSubIndexBILL_Case001(){
-		BeancacheKeyTreeIndex<Bill, Integer> sub =
+		___BeancacheKeyTreeIndex___<Bill, Integer> sub =
 				BILL_IDX.subIndex(
 				KeyBuilder.root().
 					meta(PERSON).is(1L).
@@ -168,7 +169,7 @@ public class BeancacheKeyTreeIndexTest {
 				meta(PERSON).is(1L).
 				build(); 
 		Key<Person, Long> key = 
-				BeancacheKeyTreeIndex.chainKeyAsMax(PERSON, arg);
+				___BeancacheKeyTreeIndex___.chainKeyAsMax(PERSON, arg);
 		assertSame(key, arg);
 	}
 	
@@ -256,7 +257,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testHeadKeyIndexCase001(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.headKeyIndex(KeyBuilder.root().meta(PERSON).is(1L).build(), false);
 		assertThat(sub.navigableSet().size(), is(1*ACCOUNT_SIZE*BILL_SIZE));
 		for (Key<Bill, Integer> b : sub.navigableSet()){
@@ -269,7 +270,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testHeadKeyIndexCase002(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.headKeyIndex(KeyBuilder.root().meta(PERSON).is(1L).build(), true);
 		assertThat(sub.navigableSet().size(), is(2*ACCOUNT_SIZE*BILL_SIZE));
 		for (Key<Bill, Integer> b : sub.navigableSet()){
@@ -282,7 +283,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTailKeyIndexCase001(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.tailKeyIndex(KeyBuilder.root().meta(PERSON).is(98L).build(), false);
 		assertThat(sub.navigableSet().size(), is(1*ACCOUNT_SIZE*BILL_SIZE));
 		for (Key<Bill, Integer> b : sub.navigableSet()){
@@ -295,7 +296,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTailKeyIndexCase002(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.tailKeyIndex(KeyBuilder.root().meta(PERSON).is(98L).build(), true);
 		assertThat(sub.navigableSet().size(), is(2*ACCOUNT_SIZE*BILL_SIZE));
 		for (Key<Bill, Integer> b : sub.navigableSet()){
@@ -308,7 +309,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSubKeyIndexCase001(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.subKeyIndex(
 						KeyBuilder.root().meta(PERSON).is(1L).build(), false,
 						KeyBuilder.root().meta(PERSON).is(3L).build(), false
@@ -324,7 +325,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSubKeyIndexCase002(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.subKeyIndex(
 						KeyBuilder.root().meta(PERSON).is(1L).build(), true,
 						KeyBuilder.root().meta(PERSON).is(3L).build(), false
@@ -340,7 +341,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSubKeyIndexCase003(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.subKeyIndex(
 						KeyBuilder.root().meta(PERSON).is(1L).build(), false,
 						KeyBuilder.root().meta(PERSON).is(3L).build(), true
@@ -356,7 +357,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSubKeyIndexCase004(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.subKeyIndex(
 						KeyBuilder.root().meta(PERSON).is(1L).build(), true,
 						KeyBuilder.root().meta(PERSON).is(3L).build(), true
@@ -371,7 +372,7 @@ public class BeancacheKeyTreeIndexTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSubKeyIndexCase005(){
-		BeancacheKeyTreeIndex<Bill,Integer> sub = 
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
 				BILL_IDX.child(
 						KeyBuilder.root().meta(PERSON).is(2L).build()
 						);
@@ -380,5 +381,49 @@ public class BeancacheKeyTreeIndexTest {
 			long v = ((Key<Person,Long>) b.getParent().getParent()).value(); 
 			assertTrue(v == 2L);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSubKeyIndexCase006(){
+		___BeancacheKeyTreeIndex___<Bill,Integer> sub = 
+				BILL_IDX.child(
+						KeyBuilder.root().meta(PERSON).is(2L).build()
+						);
+		assertThat(sub.navigableSet().size(), is(1*ACCOUNT_SIZE*BILL_SIZE));
+		for (Key<Bill, Integer> b : sub.navigableSet()){
+			long v = ((Key<Person,Long>) b.getParent().getParent()).value(); 
+			assertTrue(v == 2L);
+		}
+	}
+	
+	@Test
+	public void testPut(){
+		___BeancacheKeyTreeIndex___<Bill,Integer> idx = new ___BeancacheKeyTreeIndex___<Bill, Integer>(BILL);
+		for (int i=0; i<PERSON_SIZE; i++){
+			Person p = DataProvider.create(i);
+			Key<Person, Long> pk = 
+					KeyBuilder.root().
+					meta(PERSON).is(p.getId()).
+					build(); 
+			for (int j=0; j<ACCOUNT_SIZE; j++){
+				Account a = DataProvider.create(i,j);
+				Key<Account, String> ak = 
+						KeyBuilder.parent(pk).
+						meta(ACCOUNT).is(a.getEmail()).
+						build();
+				for (int k=0; k<BILL_SIZE; k++){
+					Bill b = DataProvider.create(i, j, k);
+					Key<Bill, Integer> bk =
+							KeyBuilder.parent(ak).
+							meta(BILL).is(b.getNo()).
+							build();
+					idx.add(bk);
+				}
+			}
+		}
+	}
+	class TreeKeyIndex<BT, KT extends Comparable<KT>>{
+		
 	}
 }

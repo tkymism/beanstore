@@ -21,8 +21,8 @@ public class Beancache<BT,KT extends Comparable<KT>> implements Map<Key<BT, KT>,
 		this.beanMeta = beanMeta;
 		this.delegate = delegate;
 	}
-	public BeancacheScaner<BT,KT> scan(){
-		return new BeancacheScaner<BT,KT>(beanMeta, delegate);
+	public BeancacheQuery<BT,KT> query(){
+		return new BeancacheQuery<BT,KT>(beanMeta, delegate);
 	}
 	@Override
 	public int size() {

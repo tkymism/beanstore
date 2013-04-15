@@ -13,16 +13,17 @@ import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyComparator;
 import com.tkym.labs.beanmeta.PropertyMeta;
 
-public class BeancachePropertyTreeIndex<BT,KT extends Comparable<KT>, PT extends Comparable<PT>>{
+@Deprecated
+class ___BeancachePropertyTreeIndex___<BT,KT extends Comparable<KT>, PT extends Comparable<PT>>{
 	private final NavigableMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>> navigableMap;
 	private final PropertyMeta<BT, PT> propertyMeta;
 	private final BeanMeta<BT, KT> beanMeta;
-	public BeancachePropertyTreeIndex(BeanMeta<BT, KT> beanMeta, PropertyMeta<BT, PT> propertyMeta){
+	___BeancachePropertyTreeIndex___(BeanMeta<BT, KT> beanMeta, PropertyMeta<BT, PT> propertyMeta){
 		this(beanMeta, propertyMeta, 
 				new ConcurrentSkipListMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>>(
 						comparator(beanMeta, propertyMeta)));
 	}
-	BeancachePropertyTreeIndex(BeanMeta<BT, KT> beanMeta, PropertyMeta<BT, PT> propertyMeta, NavigableMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>> navigableMap){
+	___BeancachePropertyTreeIndex___(BeanMeta<BT, KT> beanMeta, PropertyMeta<BT, PT> propertyMeta, NavigableMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>> navigableMap){
 		this.navigableMap = navigableMap;
 		this.propertyMeta = propertyMeta;
 		this.beanMeta = beanMeta;
@@ -30,8 +31,8 @@ public class BeancachePropertyTreeIndex<BT,KT extends Comparable<KT>, PT extends
 	NavigableMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>> navigableMap(){
 		return this.navigableMap;
 	}
-	BeancachePropertyTreeIndex<BT,KT,PT> createIndexFor(NavigableMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>> navigableMap){
-		return new BeancachePropertyTreeIndex<BT,KT,PT>(beanMeta, propertyMeta, navigableMap);
+	___BeancachePropertyTreeIndex___<BT,KT,PT> createIndexFor(NavigableMap<BeancacheTreeIndexKey<BT,KT,PT>,Key<BT, KT>> navigableMap){
+		return new ___BeancachePropertyTreeIndex___<BT,KT,PT>(beanMeta, propertyMeta, navigableMap);
 	}
 	Key<BT, KT> put(Key<BT, KT> key, PT value){
 		return this.navigableMap.put(createIndexKey(key,value), key);
@@ -52,7 +53,7 @@ public class BeancachePropertyTreeIndex<BT,KT extends Comparable<KT>, PT extends
 		return createIndexKey(key, propertyMeta.access(bean).get());
 	}
 	BeancacheTreeIndexKey<BT,KT,PT> createIndexKeyAsKeyMax(PT value){
-		return new BeancachePropertyTreeIndex.BeancacheTreeIndexKey<BT, KT, PT>(BeancacheTreeIndexKey.MAX, value);
+		return new ___BeancachePropertyTreeIndex___.BeancacheTreeIndexKey<BT, KT, PT>(BeancacheTreeIndexKey.MAX, value);
 	}
 	BeancacheTreeIndexKey<BT,KT,PT> createIndexKeyAsKeyMin(PT value){
 		return new BeancacheTreeIndexKey<BT, KT, PT>(BeancacheTreeIndexKey.MIN, value);
@@ -63,13 +64,13 @@ public class BeancachePropertyTreeIndex<BT,KT extends Comparable<KT>, PT extends
 		return new BeancacheTreeIndexKeyComparator<BT,KT,PT>(beanMeta, propertyMeta); 
 	}
 	// create tailIndex, headIndex, subIndex by BeancacheIndexKey
-	BeancachePropertyTreeIndex<BT,KT,PT> tailIndex(BeancachePropertyTreeIndex.BeancacheTreeIndexKey<BT,KT,PT> fromKey, boolean inclusive){
+	___BeancachePropertyTreeIndex___<BT,KT,PT> tailIndex(___BeancachePropertyTreeIndex___.BeancacheTreeIndexKey<BT,KT,PT> fromKey, boolean inclusive){
 		return createIndexFor(this.navigableMap.tailMap(fromKey, inclusive));
 	}
-	BeancachePropertyTreeIndex<BT,KT,PT> headIndex(BeancachePropertyTreeIndex.BeancacheTreeIndexKey<BT,KT,PT> toKey, boolean inclusive){
+	___BeancachePropertyTreeIndex___<BT,KT,PT> headIndex(___BeancachePropertyTreeIndex___.BeancacheTreeIndexKey<BT,KT,PT> toKey, boolean inclusive){
 		return createIndexFor(this.navigableMap.headMap(toKey, inclusive));
 	}
-	BeancachePropertyTreeIndex<BT,KT,PT> subIndex(
+	___BeancachePropertyTreeIndex___<BT,KT,PT> subIndex(
 			BeancacheTreeIndexKey<BT,KT,PT> fromKey, boolean fromInclusive,
 			BeancacheTreeIndexKey<BT,KT,PT> toKey, boolean toInclusive
 			){
@@ -88,16 +89,16 @@ public class BeancachePropertyTreeIndex<BT,KT extends Comparable<KT>, PT extends
 			return createIndexKeyAsKeyMin(value);
 	}
 	// create tailIndex, headIndex, subIndex by Property Value
-	public BeancachePropertyTreeIndex<BT,KT,PT> tailIndex(PT from, boolean inclusive){
+	public ___BeancachePropertyTreeIndex___<BT,KT,PT> tailIndex(PT from, boolean inclusive){
 		return this.tailIndex(createIndexKeyAsTail(from, inclusive), inclusive);
 	}
 	public Set<Key<BT, KT>> keySet(){
 		return new HashSet<Key<BT,KT>>(this.navigableMap.values());
 	}
-	public BeancachePropertyTreeIndex<BT,KT,PT> headIndex(PT to, boolean inclusive){
+	public ___BeancachePropertyTreeIndex___<BT,KT,PT> headIndex(PT to, boolean inclusive){
 		return this.headIndex(createIndexKeyAsHead(to, inclusive), inclusive);
 	}
-	public BeancachePropertyTreeIndex<BT,KT,PT> subIndex(
+	public ___BeancachePropertyTreeIndex___<BT,KT,PT> subIndex(
 				PT from, boolean fromInclusive,
 				PT to, boolean toInclusive
 			){
@@ -141,11 +142,11 @@ public class BeancachePropertyTreeIndex<BT,KT extends Comparable<KT>, PT extends
 			propertyComparator = BeanMetaUtils.get().propertyComparator(propertyMeta).nullFirst();
 			keyComparator = KeyComparator.comparator(beanMeta);
 		}
-		BeancachePropertyTreeIndex.BeancacheTreeIndexKeyComparator<BT,KT,PT> nullFirst(){
+		BeancacheTreeIndexKeyComparator<BT,KT,PT> nullFirst(){
 			propertyComparator.nullFirst();
 			return this;
 		}
-		BeancachePropertyTreeIndex.BeancacheTreeIndexKeyComparator<BT,KT,PT> nullLast(){
+		BeancacheTreeIndexKeyComparator<BT,KT,PT> nullLast(){
 			propertyComparator.nullLast();
 			return this;
 		}

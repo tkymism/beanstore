@@ -1,53 +1,55 @@
 package com.tkym.labs.beancache;
 
+import java.util.Collection;
 import java.util.NavigableSet;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.TreeSet;
 
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
 import com.tkym.labs.beanmeta.KeyComparator;
 
-class BeancacheKeyTreeIndex<BT,KT extends Comparable<KT>>{
+@Deprecated
+class ___BeancacheKeyTreeIndex___<BT,KT extends Comparable<KT>>{
 	private final NavigableSet<Key<BT, KT>> navigableSet;
 	private final BeanMeta<BT, KT> beanMeta;
-	private BeancacheKeyTreeIndex(BeanMeta<BT, KT> beanMeta, NavigableSet<Key<BT, KT>> navigableSet) {
+	private ___BeancacheKeyTreeIndex___(BeanMeta<BT, KT> beanMeta, NavigableSet<Key<BT, KT>> navigableSet) {
 		this.beanMeta = beanMeta;
 		this.navigableSet = navigableSet;
 	}
-	BeancacheKeyTreeIndex(BeanMeta<BT, KT> beanMeta) {
-		this(beanMeta, new ConcurrentSkipListSet<Key<BT, KT>>(KeyComparator.comparator(beanMeta)));
+	___BeancacheKeyTreeIndex___(BeanMeta<BT, KT> beanMeta) {
+		this(beanMeta, new TreeSet<Key<BT, KT>>(KeyComparator.comparator(beanMeta)));
 	}
-	BeancacheKeyTreeIndex<BT,KT> copy(NavigableSet<Key<BT, KT>> navigableMap){
-		return new BeancacheKeyTreeIndex<BT, KT>(this.beanMeta, navigableMap);
+	___BeancacheKeyTreeIndex___<BT,KT> copy(NavigableSet<Key<BT, KT>> navigableMap){
+		return new ___BeancacheKeyTreeIndex___<BT, KT>(this.beanMeta, navigableMap);
 	}
 	NavigableSet<Key<BT, KT>> navigableSet(){
 		return this.navigableSet;
 	}
-	BeancacheKeyTreeIndex<BT,KT> tailIndex(Key<BT,KT> from,
+	___BeancacheKeyTreeIndex___<BT,KT> tailIndex(Key<BT,KT> from,
 			boolean inclusive) {
 		return copy(navigableSet.tailSet(from, inclusive));
 	}
-	BeancacheKeyTreeIndex<BT,KT> headIndex(Key<BT,KT> to,
+	___BeancacheKeyTreeIndex___<BT,KT> headIndex(Key<BT,KT> to,
 			boolean inclusive) {
 		return copy(navigableSet.headSet(to, inclusive));
 	}
-	BeancacheKeyTreeIndex<BT,KT> subIndex(Key<BT,KT> from,
+	___BeancacheKeyTreeIndex___<BT,KT> subIndex(Key<BT,KT> from,
 			boolean fromInclusive, Key<BT,KT> to, boolean toInclusive) {
 		return copy(navigableSet.subSet((Key<BT, KT>) from, fromInclusive, (Key<BT, KT>) to, toInclusive));
 	}
-	BeancacheKeyTreeIndex<BT,KT> tailKeyIndex(Key<?,?> from, boolean inclusive) {
+	___BeancacheKeyTreeIndex___<BT,KT> tailKeyIndex(Key<?,?> from, boolean inclusive) {
 		return copy(navigableSet.tailSet(chainForTail(from, inclusive), inclusive));
 	}
-	BeancacheKeyTreeIndex<BT,KT> headKeyIndex(Key<?,?> to, boolean inclusive) {
+	___BeancacheKeyTreeIndex___<BT,KT> headKeyIndex(Key<?,?> to, boolean inclusive) {
 		return copy(navigableSet.headSet(chainForHead(to, inclusive), inclusive));
 	}
-	BeancacheKeyTreeIndex<BT,KT> subKeyIndex(Key<?,?> from, boolean fromInclusive, Key<?,?> to, boolean toInclusive) {
+	___BeancacheKeyTreeIndex___<BT,KT> subKeyIndex(Key<?,?> from, boolean fromInclusive, Key<?,?> to, boolean toInclusive) {
 		return copy(navigableSet.subSet(
 				chainForTail(from, fromInclusive), fromInclusive, 
 				chainForHead(to, toInclusive), toInclusive));
 	}
-	BeancacheKeyTreeIndex<BT,KT> child(Key<?,?> parent) {
+	___BeancacheKeyTreeIndex___<BT,KT> child(Key<?,?> parent) {
 		return subKeyIndex(parent, true, parent, true);
 	}
 	private Key<BT,KT> chainForHead(Key<?,?> parent, boolean inclusive){
@@ -63,6 +65,9 @@ class BeancacheKeyTreeIndex<BT,KT extends Comparable<KT>>{
 	}
 	private Key<BT,KT> chainMaxKeyFor(Key<?,?> parent){
 		return chainKeyAsMax(this.beanMeta, parent);
+	}
+	boolean addAll(Collection<Key<BT, KT>> c) {
+		return navigableSet.addAll(c);
 	}
 	boolean add(Key<BT, KT> key) {
 		return navigableSet.add(key);

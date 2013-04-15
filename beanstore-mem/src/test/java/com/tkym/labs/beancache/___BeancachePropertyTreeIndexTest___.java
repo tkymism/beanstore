@@ -9,26 +9,27 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.tkym.labs.beancache.BeancachePropertyTreeIndex.BeancacheTreeIndexKey;
-import com.tkym.labs.beancache.BeancachePropertyTreeIndex.BeancacheTreeIndexKeyComparator;
+import com.tkym.labs.beancache.___BeancachePropertyTreeIndex___.BeancacheTreeIndexKey;
+import com.tkym.labs.beancache.___BeancachePropertyTreeIndex___.BeancacheTreeIndexKeyComparator;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanmeta.KeyBuilder;
 import com.tkym.labs.beans.BeanBuilder.HogeBuilder;
 import com.tkym.labs.beans.Hoge;
 import com.tkym.labs.beans.HogeMeta;
 
-public class BeancachePropertyTreeIndexTest {
+@SuppressWarnings("deprecation")
+public class ___BeancachePropertyTreeIndexTest___ {
 	private static HogeMeta HOGE = HogeMeta.get();
 	@Test
 	public void test_headIndex(){
-		BeancachePropertyTreeIndex<Hoge,String,Integer> index 
-			= new BeancachePropertyTreeIndex<Hoge,String,Integer>(HOGE, HOGE.intValue);
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> index 
+			= new ___BeancachePropertyTreeIndex___<Hoge,String,Integer>(HOGE, HOGE.intValue);
 		for(int i=0; i<100; i++)
 			index.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Map<Key<Hoge, String>, Hoge> map = new HashMap<Key<Hoge,String>, Hoge>();
 		for(int i=0; i<100; i++)
 			map.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
-		BeancachePropertyTreeIndex<Hoge,String,Integer> sub;
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> sub;
 		Iterator<Key<Hoge, String>> ite;
 		// headIndex while key is maximum and intValue:3
 		sub = index.headIndex(index.createIndexKey(KeyBuilder.root().meta(HOGE).max().build(), 3), true);
@@ -84,14 +85,14 @@ public class BeancachePropertyTreeIndexTest {
 	
 	@Test
 	public void test_tailIndex(){
-		BeancachePropertyTreeIndex<Hoge,String,Integer> index 
-			= new BeancachePropertyTreeIndex<Hoge,String,Integer>(HOGE, HOGE.intValue);
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> index 
+			= new ___BeancachePropertyTreeIndex___<Hoge,String,Integer>(HOGE, HOGE.intValue);
 		for(int i=0; i<100; i++)
 			index.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Map<Key<Hoge, String>, Hoge> map = new HashMap<Key<Hoge,String>, Hoge>();
 		for(int i=0; i<100; i++)
 			map.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
-		BeancachePropertyTreeIndex<Hoge,String,Integer> sub;
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> sub;
 		Iterator<Key<Hoge,String>> ite;
 
 		sub = index.tailIndex(index.createIndexKey(KeyBuilder.root().meta(HOGE).max().build(), 96), true);
@@ -142,15 +143,15 @@ public class BeancachePropertyTreeIndexTest {
 	
 	@Test
 	public void test_headIndexForPropertyValueCase001(){
-		BeancachePropertyTreeIndex<Hoge,String,Integer> index 
-			= new BeancachePropertyTreeIndex<Hoge,String,Integer>(HOGE, HOGE.intValue);
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> index 
+			= new ___BeancachePropertyTreeIndex___<Hoge,String,Integer>(HOGE, HOGE.intValue);
 		for(int i=0; i<100; i++)
 			index.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Map<Key<Hoge, String>, Hoge> map = new HashMap<Key<Hoge,String>, Hoge>();
 		for(int i=0; i<100; i++)
 			map.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Iterator<Key<Hoge,String>> ite;
-		ite = ((BeancachePropertyTreeIndex<Hoge,String,Integer>)index.headIndex(3, true)).navigableMap().values().iterator();
+		ite = ((___BeancachePropertyTreeIndex___<Hoge,String,Integer>)index.headIndex(3, true)).navigableMap().values().iterator();
 		assertThat(map.get(ite.next()).getIntValue(), is(0));
 		assertThat(map.get(ite.next()).getIntValue(), is(1));
 		assertThat(map.get(ite.next()).getIntValue(), is(2));
@@ -160,15 +161,15 @@ public class BeancachePropertyTreeIndexTest {
 	
 	@Test
 	public void testBeancacheIndex_headIndexForPropertyValueCase002(){
-		BeancachePropertyTreeIndex<Hoge,String,Integer> index 
-			= new BeancachePropertyTreeIndex<Hoge,String,Integer>(HOGE, HOGE.intValue);
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> index 
+			= new ___BeancachePropertyTreeIndex___<Hoge,String,Integer>(HOGE, HOGE.intValue);
 		for(int i=0; i<100; i++)
 			index.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Map<Key<Hoge, String>, Hoge> map = new HashMap<Key<Hoge,String>, Hoge>();
 		for(int i=0; i<100; i++)
 			map.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Iterator<Key<Hoge,String>> ite;
-		ite = ((BeancachePropertyTreeIndex<Hoge,String,Integer>)index.headIndex(3, false)).navigableMap().values().iterator();
+		ite = ((___BeancachePropertyTreeIndex___<Hoge,String,Integer>)index.headIndex(3, false)).navigableMap().values().iterator();
 		assertThat(map.get(ite.next()).getIntValue(), is(0));
 		assertThat(map.get(ite.next()).getIntValue(), is(1));
 		assertThat(map.get(ite.next()).getIntValue(), is(2));
@@ -177,15 +178,15 @@ public class BeancachePropertyTreeIndexTest {
 
 	@Test
 	public void testBeancacheIndex_tailIndexForPropertyValueCase001(){
-		BeancachePropertyTreeIndex<Hoge,String,Integer> index 
-			= new BeancachePropertyTreeIndex<Hoge,String,Integer>(HOGE, HOGE.intValue);
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> index 
+			= new ___BeancachePropertyTreeIndex___<Hoge,String,Integer>(HOGE, HOGE.intValue);
 		for(int i=0; i<100; i++)
 			index.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Map<Key<Hoge, String>, Hoge> map = new HashMap<Key<Hoge,String>, Hoge>();
 		for(int i=0; i<100; i++)
 			map.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Iterator<Key<Hoge,String>> ite;
-		ite = ((BeancachePropertyTreeIndex<Hoge,String,Integer>)index.tailIndex(96, true)).navigableMap().values().iterator();
+		ite = ((___BeancachePropertyTreeIndex___<Hoge,String,Integer>)index.tailIndex(96, true)).navigableMap().values().iterator();
 		assertThat(map.get(ite.next()).getIntValue(), is(96));
 		assertThat(map.get(ite.next()).getIntValue(), is(97));
 		assertThat(map.get(ite.next()).getIntValue(), is(98));
@@ -195,15 +196,15 @@ public class BeancachePropertyTreeIndexTest {
 	
 	@Test
 	public void testBeancacheIndex_tailIndexForPropertyValueCase002(){
-		BeancachePropertyTreeIndex<Hoge,String,Integer> index 
-			= new BeancachePropertyTreeIndex<Hoge,String,Integer>(HOGE, HOGE.intValue);
+		___BeancachePropertyTreeIndex___<Hoge,String,Integer> index 
+			= new ___BeancachePropertyTreeIndex___<Hoge,String,Integer>(HOGE, HOGE.intValue);
 		for(int i=0; i<100; i++)
 			index.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Map<Key<Hoge, String>, Hoge> map = new HashMap<Key<Hoge,String>, Hoge>();
 		for(int i=0; i<100; i++)
 			map.put(HOGE.key(null, createHogeKeyStringForID(i)), createHogeForID(i));
 		Iterator<Key<Hoge,String>> ite;
-		ite = ((BeancachePropertyTreeIndex<Hoge,String,Integer>)index.tailIndex(96, false)).navigableMap().values().iterator();
+		ite = ((___BeancachePropertyTreeIndex___<Hoge,String,Integer>)index.tailIndex(96, false)).navigableMap().values().iterator();
 		assertThat(map.get(ite.next()).getIntValue(), is(97));
 		assertThat(map.get(ite.next()).getIntValue(), is(98));
 		assertThat(map.get(ite.next()).getIntValue(), is(99));

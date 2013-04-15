@@ -59,7 +59,6 @@ public class BeanstoreServiceMemTest {
 		@Override
 		public QueryResultFetcher<BT> executeQueryAsBean(
 				BeanQuerySource<BT, KT> objects) throws Exception {
-//			objects.filterList();
 			return null;
 		}
 		@Override
