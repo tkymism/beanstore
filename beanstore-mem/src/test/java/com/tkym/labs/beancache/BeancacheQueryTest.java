@@ -85,7 +85,7 @@ public class BeancacheQueryTest {
 	
 	@Test
 	public void testBeancacheCase001(){
-		Set<Key<Person,Long>> ret = PERSON_CACHE.query().property(PERSON.name).head("a00001", false).keySet();
+		Set<Key<Person,Long>> ret = PERSON_CACHE.queryAll().property(PERSON.name).head("a00001", false);
 		assertThat(ret.size(), is(1));
 		Iterator<Key<Person,Long>> ite = ret.iterator();
 		assertThat(PERSON_CACHE.get(ite.next()).getName(), is("a00000"));
@@ -93,13 +93,13 @@ public class BeancacheQueryTest {
 	
 	@Test
 	public void testBeancacheCase002(){
-		Set<Key<Person,Long>> ret = PERSON_CACHE.query().property(PERSON.name).head("a00001", true).keySet();
+		Set<Key<Person,Long>> ret = PERSON_CACHE.queryAll().property(PERSON.name).head("a00001", true);
 		assertThat(ret.size(), is(2));
 	}
 
 	@Test
 	public void testBeancacheCase003(){
-		Set<Key<Person,Long>> ret = PERSON_CACHE.query().property(PERSON.name).tail("a00098", false).keySet();
+		Set<Key<Person,Long>> ret = PERSON_CACHE.queryAll().property(PERSON.name).tail("a00098", false);
 		assertThat(ret.size(), is(1));
 		Iterator<Key<Person,Long>> ite = ret.iterator();
 		assertThat(PERSON_CACHE.get(ite.next()).getName(), is("a00099"));
@@ -107,56 +107,50 @@ public class BeancacheQueryTest {
 	
 	@Test
 	public void testBeancacheCase004(){
-		Set<Key<Person,Long>> ret = PERSON_CACHE.query().property(PERSON.name).tail("a00098", true).keySet();
+		Set<Key<Person,Long>> ret = PERSON_CACHE.queryAll().property(PERSON.name).tail("a00098", true);
 		assertThat(ret.size(), is(2));
 	}
 	
 	@Test
 	public void testBeancacheCase005(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", false, "a00005", false).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", false, "a00005", false);
 		assertThat(ret.size(), is(1));
 	}
 	@Test
 	public void testBeancacheCase006(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", true, "a00005", false).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", true, "a00005", false);
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancacheCase007(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", false, "a00005", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", false, "a00005", true);
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancacheCase008(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", true, "a00005", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", true, "a00005", true);
 		assertThat(ret.size(), is(3));
 	}
 	@Test
 	public void testBeancacheCase009(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", true, "a00005", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", true, "a00005", true);
 		assertThat(ret.size(), is(3));
 	}
 	@Test
 	public void testBeancachePropertyCase001(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).head("a00001", false).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).head("a00001", false);
 		assertThat(ret.size(), is(1));
 		Iterator<Key<Person,Long>> ite = ret.iterator();
 		assertThat(PERSON_CACHE.get(ite.next()).getName(), is("a00000"));
@@ -165,18 +159,16 @@ public class BeancacheQueryTest {
 	@Test
 	public void testBeancachePropertyCase002(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).head("a00001", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).head("a00001", true);
 		assertThat(ret.size(), is(2));
 	}
 
 	@Test
 	public void testBeancachePropertyCase003(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).tail("a00098", false).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).tail("a00098", false);
 		assertThat(ret.size(), is(1));
 		Iterator<Key<Person,Long>> ite = ret.iterator();
 		assertThat(PERSON_CACHE.get(ite.next()).getName(), is("a00099"));
@@ -185,59 +177,52 @@ public class BeancacheQueryTest {
 	@Test
 	public void testBeancachePropertyCase004(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).tail("a00098", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).tail("a00098", true);
 		assertThat(ret.size(), is(2));
 	}
 	
 	@Test
 	public void testBeancachePropertyCase005(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", false, "a00005", false).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", false, "a00005", false);
 		assertThat(ret.size(), is(1));
 	}
 	@Test
 	public void testBeancachePropertyCase006(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", true, "a00005", false).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", true, "a00005", false);
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancachePropertyCase007(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", false, "a00005", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", false, "a00005", true);
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancachePropertyCase008(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", true, "a00005", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", true, "a00005", true);
 		assertThat(ret.size(), is(3));
 	}
 	@Test
 	public void testBeancachePropertyCase009(){
 		Set<Key<Person,Long>> ret = 
-				PERSON_CACHE.query().
-				property(PERSON.name).sub("a00003", true, "a00005", true).
-				keySet();
+				PERSON_CACHE.queryAll().
+				property(PERSON.name).sub("a00003", true, "a00005", true);
 		assertThat(ret.size(), is(3));
 	}
 	
 	@Test
 	public void testBeancachePropertyCase101(){
 		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				property(ACCOUNT.address).tail("00098", false).
-				keySet();
+				ACCOUNT_CACHE.queryAll().
+				property(ACCOUNT.address).tail("00098", false);
 		assertThat(ret.size(), is(2*ACCOUNT_SIZE));
 		for (Key<Account,String> k : ret)
 			assertTrue(
@@ -248,11 +233,11 @@ public class BeancacheQueryTest {
 	
 	@Test
 	public void testBeancachePropertyCase109(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				property(ACCOUNT.address).sub("00003", true, "00005", true).
-				property(ACCOUNT.address).sub("00003", false, "00005", false).
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).sub("00003", true, "00005", true)).
+				intersect(q.property(ACCOUNT.address).sub("00003", false, "00005", false)).
+				asKeySet();
 		assertThat(ret.size(), is(2*ACCOUNT_SIZE));
 		for (Key<Account,String> k : ret)
 			assertTrue(
@@ -300,178 +285,307 @@ public class BeancacheQueryTest {
 	@Test
 	public void testBeancacheKeyCase001(){
 		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				keySet();
+				ACCOUNT_CACHE.queryAll().
+				key(PERSON).equalsTo(3L);
 		assertThat(ret.size(), is(1*ACCOUNT_SIZE));
 		for (Key<Account, String> k : ret)
 			assertTrue(ACCOUNT_CACHE.get(k).getAddress().startsWith("00003st."));
 	}
 	@Test
 	public void testBeancacheKeyCase002(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).tail("00003st.008", true).
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).tail("00003st.008", true)).
+				asKeySet();
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancacheKeyCase003(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).tail("00003st.008", false).
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).tail("00003st.008", false)).
+				asKeySet();
 		assertThat(ret.size(), is(1));
 	}
 	@Test
 	public void testBeancacheKeyCase004(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).head("00003st.001", true).
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).head("00003st.001", true)).
+				asKeySet();
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancacheKeyCase005(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).head("00003st.001", false).
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).head("00003st.001", false)).
+				asKeySet();
 		assertThat(ret.size(), is(1));
 	}
 	
 	@Test
 	public void testBeancachePropertyGreaterLessCase001(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).lessThan("00003st.001").
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).lessThan("00003st.001")).
+				asKeySet();
 		assertThat(ret.size(), is(1));
 	}
 	@Test
 	public void testBeancachePropertyGreaterLessCase002(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).lessEqual("00003st.001").
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).lessEqual("00003st.001")).
+				asKeySet();
 		assertThat(ret.size(), is(2));
 	}
 	@Test
 	public void testBeancachePropertyGreaterLessCase003(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).greaterThan("00003st.008").
-				keySet();
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).greaterThan("00003st.008")).
+				asKeySet();
 		assertThat(ret.size(), is(1));
 	}
 	@Test
 	public void testBeancachePropertyGreaterLessCase004(){
+		BeancacheQuery<Account,String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.key(PERSON).equalsTo(3L)).
+				intersect(q.property(ACCOUNT.address).greaterEqual("00003st.008")).
+				asKeySet();
+		assertThat(ret.size(), is(2));
+	}
+	
+	@Test
+	public void testBeancacheKeyCase101(){
 		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				key(PERSON).equalsTo(3L).
-				property(ACCOUNT.address).greaterEqual("00003st.008").
-				keySet();
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build()).asKeySet();
+		assertThat(ret.size(), is(1*ACCOUNT_SIZE));
+		for (Key<Account, String> k : ret)
+			assertTrue(ACCOUNT_CACHE.get(k).getAddress().startsWith("00003st."));
+	}
+	@Test
+	public void testBeancacheKeyCase102(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).tail("00003st.008", true)).
+				asKeySet();
 		assertThat(ret.size(), is(2));
 	}
 	@Test
+	public void testBeancacheKeyCase103(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).tail("00003st.008", false)).
+				asKeySet();
+		assertThat(ret.size(), is(1));
+	}
+	@Test
+	public void testBeancacheKeyCase104(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).head("00003st.001", true)).
+				asKeySet();
+		assertThat(ret.size(), is(2));
+	}
+	@Test
+	public void testBeancacheKeyCase105(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).head("00003st.001", false)).
+				asKeySet();
+		assertThat(ret.size(), is(1));
+	}
+	
+	@Test
+	public void testBeancachePropertyGreaterLessCase101(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).lessThan("00003st.001")).
+				asKeySet();
+		assertThat(ret.size(), is(1));
+	}
+	@Test
+	public void testBeancachePropertyGreaterLessCase102(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).lessEqual("00003st.001")).
+				asKeySet();
+		assertThat(ret.size(), is(2));
+	}
+	@Test
+	public void testBeancachePropertyGreaterLessCase103(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).greaterThan("00003st.008")).
+				asKeySet();
+		assertThat(ret.size(), is(1));
+	}
+	@Test
+	public void testBeancachePropertyGreaterLessCase104(){
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).greaterEqual("00003st.008")).
+				asKeySet();
+		assertThat(ret.size(), is(2));
+	}
+	
+	@Test
 	public void testBeancachePropertyEqualsToCase001(){
-		Set<Key<Account,String>> ret = 
-				ACCOUNT_CACHE.query().
-				property(ACCOUNT.address).equalsTo("00003st.008").
-				keySet();
+		BeancacheQuery<Account,String> q = 
+				ACCOUNT_CACHE.queryFor(KeyBuilder.root().meta(PERSON).is(3L).build());
+		Set<Key<Account,String>> ret = q. 
+				intersect(q.property(ACCOUNT.address).equalsTo("00003st.008")).
+				asKeySet();
 		assertThat(ret.size(), is(1));
 	}
 	@Test
 	public void testBeancachePropertyEqualsToCase002(){
 		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).equalsTo(15.0f).
-				keySet();
+				BILL_CACHE.queryAll().
+				property(BILL.amount).equalsTo(15.0f);
 		assertThat(ret.size(), is(1000));
 	}
 	@Test
 	public void testBeancachePropertyEqualsToCase003(){
 		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).equalsTo(3.0f).
-				keySet();
+				BILL_CACHE.queryAll().
+				property(BILL.amount).equalsTo(3.0f);
 		assertThat(ret.size(), is(400));
 	}
 	@Test
 	public void testBeancachePropertyEqualsToCase004(){
 		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).greaterThan(96.0f).
-				keySet();
+				BILL_CACHE.queryAll().
+				property(BILL.amount).greaterThan(96.0f);
 		assertThat(ret.size(), is(7500));
 	}
 	@Test
 	public void testBeancachePropertyEqualsToCase004_(){
 		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).greaterThan(96.0f).
-				keySet();
+				BILL_CACHE.queryAll().
+				property(BILL.amount).greaterThan(96.0f);
 		assertThat(ret.size(), is(7500));
 	}
 	@Test
 	public void testBeancachePropertyEqualsToCase005(){
-		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).greaterThan(96.0f).
-				property(BILL.amount).greaterThan(101.0f).
-				property(BILL.amount).greaterThan(103.0f).
-				keySet();
+		BeancacheQuery<Bill,Integer> q = BILL_CACHE.queryAll();
+		Set<Key<Bill,Integer>> ret = q. 
+				intersect(q.property(BILL.amount).greaterThan(96.0f)).
+				intersect(q.property(BILL.amount).greaterThan(101.0f)).
+				intersect(q.property(BILL.amount).greaterThan(103.0f)).
+				asKeySet();
 		assertThat(ret.size(), is(1500));
 	}
 	
 	@Test
 	public void testBeancachePropertyEqualsToCase006(){
 		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				key(PERSON).equalsTo(99L).
-				keySet();
+				BILL_CACHE.queryAll().
+				key(PERSON).equalsTo(99L);
 		assertThat(ret.size(), is(1000));
 	}
+	
 	private static BeancacheQuery<Bill, Integer> TEMP;
 	@Test
 	public void testBeancachePropertyEqualsToCase007_001(){
-		TEMP = 
-				BILL_CACHE.query().
-				key(PERSON).equalsTo(99L);
-		assertThat(TEMP.keySet().size(), is(1000));
+		TEMP = BILL_CACHE.queryAll();
+		TEMP.intersect(TEMP.key(PERSON).equalsTo(99L));
+		assertThat(TEMP.asKeySet().size(), is(1000));
 	}
 	
 	@Test
 	public void testBeancachePropertyInCase001(){
-		Set<Key<Bill,Integer>> ret = 
-				TEMP.property(BILL.amount).in(105.0f).
-				keySet();
-		assertThat(ret.size(), is(100));
+		BeancacheQuery<Bill, Integer> q = BILL_CACHE.queryAll();
+		@SuppressWarnings("unchecked")
+		Set<Key<Bill,Integer>> ret = q. 
+				intersect(
+						BeancacheQuery.createLinkedHashSetForUnion(
+								q.property(BILL.amount).equalsTo(0.0f),
+								q.property(BILL.amount).equalsTo(29.0f)
+								)
+						).
+				asKeySet();
+		assertThat(ret.size(), is(1100));
 	}
 
 	@Test
 	public void testBeancachePropertyEqualsToCase007_002(){
-		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).in(100.0f, 2.0f, 76.0f).
-				keySet();
+		BeancacheQuery<Bill, Integer> q = BILL_CACHE.queryAll();
+		@SuppressWarnings("unchecked")
+		Set<Key<Bill,Integer>> ret = q.
+				intersect(
+						BeancacheQuery.createLinkedHashSetForUnion(
+								q.property(BILL.amount).equalsTo(100.0f),
+								q.property(BILL.amount).equalsTo(2.0f),
+								q.property(BILL.amount).equalsTo(76.0f)
+								)
+						).
+				asKeySet();
 		assertThat(ret.size(), is(2200));
 	}
 	
 	@Test
 	public void testBeancachePropertyNotEqualsToCase(){
-		Set<Key<Bill,Integer>> ret = 
-				BILL_CACHE.query().
-				property(BILL.amount).notEqualsTo(105.0f).
-				keySet();
+		BeancacheQuery<Bill, Integer> q = BILL_CACHE.queryAll();
+		Set<Key<Bill,Integer>> ret = q. 
+				defferent(q.property(BILL.amount).equalsTo(105.0f)).
+				asKeySet();
 		assertThat(ret.size(), is(99600));
+	}
+	
+	@Test
+	public void testBeancacheIndexMatcherCase001(){
+		BeancacheQuery<Account, String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account, String>> ret = q. 
+			key().match(BeancacheIndexMatcher.Matchers.endWith("001.com"));
+		assertThat(ret.size(), is(100));
+	}
+	
+	@Test
+	public void testBeancacheIndexMatcherCase002(){
+		BeancacheQuery<Account, String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account, String>> ret = q. 
+			property(ACCOUNT.address).match(
+					BeancacheIndexMatcher.Matchers.startWith("00000")
+					);
+		assertThat(ret.size(), is(1*ACCOUNT_SIZE));
+	}
+
+	@Test
+	public void testBeancacheIndexMatcherCase003(){
+		BeancacheQuery<Account, String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account, String>> ret = q. 
+			property(ACCOUNT.address).match(
+					BeancacheIndexMatcher.Matchers.contain("00st")
+					);
+		assertThat(ret.size(), is(1*ACCOUNT_SIZE));
+	}
+	@Test
+	public void testBeancacheIndexMatcherCase004(){
+		BeancacheQuery<Account, String> q = ACCOUNT_CACHE.queryAll();
+		Set<Key<Account, String>> ret = q. 
+			property(ACCOUNT.address).match(
+					BeancacheIndexMatcher.Matchers.contain("st.001")
+					);
+		assertThat(ret.size(), is(10*ACCOUNT_SIZE));
 	}
 }
 /*

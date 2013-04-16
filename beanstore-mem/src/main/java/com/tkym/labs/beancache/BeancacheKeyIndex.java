@@ -6,14 +6,13 @@ import com.tkym.labs.beanmeta.Key;
 public class BeancacheKeyIndex<BT,KT extends Comparable<KT>, PBT, PKT extends Comparable<PKT>>
 	extends AbstractBeancacheIndex<BT,KT,PKT>{
 	private final int count;
-	BeancacheKeyIndex(BeancacheQuery<BT,KT> scaner, BeanMeta<PBT, PKT> parent){
-		super(scaner);
-		this.count = countRank(scaner.beanMeta, parent);
+	BeancacheKeyIndex(BeanMeta<BT,KT> current, BeanMeta<PBT, PKT> parent){
+		this.count = countRank(current, parent);
 		if (this.count < 0)
 			throw new IllegalArgumentException(
 					parent.getBeanType().getName()+
 					" is not parent class of " + 
-					scaner.beanMeta.getBeanType().getName());
+					current.getBeanType().getName());
 	}
 	void add(Key<BT, KT> key){
 		this.index.put(typeSafeValueIfHasParent(key), key);

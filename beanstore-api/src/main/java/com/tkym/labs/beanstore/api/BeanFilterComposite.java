@@ -1,7 +1,7 @@
 package com.tkym.labs.beanstore.api;
 
 
-public class BeanFilterComposite {
+public class BeanFilterComposite implements BeanFilterCriteria{
 	public enum BeanFilterCompositeType{
 		AND, OR
 	}

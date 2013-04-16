@@ -1,16 +1,18 @@
 package com.tkym.labs.beancache;
 
+import java.util.Set;
+
+import com.tkym.labs.beanmeta.Key;
+
 
 public interface BeancacheIndex<BT,KT extends Comparable<KT>, PT extends Comparable<PT>> {
-	BeancacheQuery<BT,KT> tail(PT from, boolean inclusive);
-	BeancacheQuery<BT,KT> head(PT to, boolean inclusive);
-	BeancacheQuery<BT,KT> sub(PT from, boolean fromInclusive, PT to, boolean toInclusive);
-	BeancacheQuery<BT,KT> greaterThan(PT p);
-	BeancacheQuery<BT,KT> greaterEqual(PT p);
-	BeancacheQuery<BT,KT> lessThan(PT p);
-	BeancacheQuery<BT,KT> lessEqual(PT p);
-	BeancacheQuery<BT,KT> equalsTo(PT p);
-	BeancacheQuery<BT,KT> in(PT... ps);
-	BeancacheQuery<BT,KT> notEqualsTo(PT p);
-	BeancacheQuery<BT,KT> notIn(PT... ps);
+	Set<Key<BT,KT>> tail(PT from, boolean inclusive);
+	Set<Key<BT,KT>> head(PT to, boolean inclusive);
+	Set<Key<BT,KT>> sub(PT from, boolean fromInclusive, PT to, boolean toInclusive);
+	Set<Key<BT,KT>> greaterThan(PT p);
+	Set<Key<BT,KT>> greaterEqual(PT p);
+	Set<Key<BT,KT>> lessThan(PT p);
+	Set<Key<BT,KT>> lessEqual(PT p);
+	Set<Key<BT,KT>> equalsTo(PT p);
+	Set<Key<BT,KT>> match(BeancacheIndexMatcher<PT> matcher);
 }

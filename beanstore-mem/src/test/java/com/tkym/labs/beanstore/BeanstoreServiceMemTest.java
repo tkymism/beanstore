@@ -1,6 +1,7 @@
 package com.tkym.labs.beanstore;
 
 import com.tkym.labs.beancache.Beancache;
+import com.tkym.labs.beancache.BeancacheQuery;
 import com.tkym.labs.beancache.BeancacheRepository;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
@@ -51,10 +52,13 @@ public class BeanstoreServiceMemTest {
 	}
 	class BeanQueryExecutor<BT,KT extends Comparable<KT>> extends AbstractBeanQueryExecutor<BT, KT>{
 		@SuppressWarnings("unused")
-		private final Beancache<BT, KT> beancache; 
+		private final BeancacheQuery<BT, KT> beancacheQuery; 
 		BeanQueryExecutor(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent, Beancache<BT, KT> beancache) {
 			super(beanMeta, parent);
-			this.beancache = beancache;
+			if (parent != null)
+				this.beancacheQuery = beancache.queryFor(parent);
+			else
+				this.beancacheQuery = beancache.queryAll();
 		}
 		@Override
 		public QueryResultFetcher<BT> executeQueryAsBean(

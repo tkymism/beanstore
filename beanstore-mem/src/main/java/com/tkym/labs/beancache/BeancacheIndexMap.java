@@ -42,7 +42,14 @@ public class BeancacheIndexMap<P extends Comparable<P>,B,K extends Comparable<K>
 	Set<Key<B, K>> equalsTo(P p) {
 		return unionSet(navigableMap.subMap(p, true, p, true));
 	}
-	Set<Key<B, K>> unionSet(NavigableMap<P, Set<Key<B, K>>> m){
+	Set<Key<B, K>> match(BeancacheIndexMatcher<P> matcher) {
+		Set<Key<B, K>> ret = new LinkedHashSet<Key<B, K>>();
+		for (P p : navigableMap.keySet())
+			if (matcher.match(p))
+				ret.addAll(navigableMap.get(p));
+		return ret;
+	}
+	private Set<Key<B, K>> unionSet(NavigableMap<P, Set<Key<B, K>>> m){
 		Set<Key<B, K>> ret = new LinkedHashSet<Key<B, K>>();
 		for (Set<Key<B,K>> set : m.values()) ret.addAll(set);
 		return ret;

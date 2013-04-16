@@ -1,6 +1,7 @@
 package com.tkym.labs.beancache;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +22,13 @@ public class Beancache<BT,KT extends Comparable<KT>> implements Map<Key<BT, KT>,
 		this.beanMeta = beanMeta;
 		this.delegate = delegate;
 	}
-	public BeancacheQuery<BT,KT> query(){
+	public BeancacheQuery<BT,KT> queryFor(Key<?, ?> parent){
+		HashSet<Key<BT, KT>> target = new HashSet<Key<BT,KT>>();
+		for (Key<BT, KT> key : delegate.keySet())
+			if (parent.isAncestorOf(key)) target.add(key);
+		return new BeancacheQuery<BT,KT>(beanMeta, delegate, target);
+	}
+	public BeancacheQuery<BT,KT> queryAll(){
 		return new BeancacheQuery<BT,KT>(beanMeta, delegate);
 	}
 	@Override
