@@ -1,7 +1,7 @@
 package com.tkym.labs.beanstore.record;
 
 import static com.tkym.labs.beanstore.api.BeanQueryUtils.and;
-import static com.tkym.labs.beanstore.api.BeanQueryUtils.property;
+import static com.tkym.labs.beanstore.api.BeanQueryUtils.p;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -23,7 +23,7 @@ public class BeanCriteriaConverterTest {
 	public void testBeanCriteriaConverter_SorterCase001() {
 		PersonMeta PERSON = PersonMeta.get();
 		QuerySorterCriteria criteria = 
-				BeanCriteriaConverter.convert(property(PERSON.id).asc());
+				BeanCriteriaConverter.convert(p(PERSON.id).asc());
 		assertThat(criteria, is(QuerySorter.class));
 		QuerySorter sorter = (QuerySorter) criteria;
 		assertThat(sorter.getProperty(), is("id"));
@@ -33,7 +33,7 @@ public class BeanCriteriaConverterTest {
 	public void testBeanCriteriaConverter_SorterCase002() {
 		PersonMeta PERSON = PersonMeta.get();
 		QuerySorterCriteria criteria = 
-				BeanCriteriaConverter.convert(property(PERSON.id).desc());
+				BeanCriteriaConverter.convert(p(PERSON.id).desc());
 		assertThat(criteria, is(QuerySorter.class));
 		QuerySorter sorter = (QuerySorter) criteria;
 		assertThat(sorter.getProperty(), is("id"));
@@ -43,7 +43,7 @@ public class BeanCriteriaConverterTest {
 	public void testBeanCriteriaConverter_FilterCase001() {
 		PersonMeta PERSON = PersonMeta.get();
 		QueryFilterCriteria criteria = 
-				BeanCriteriaConverter.convert(property(PERSON.id).equalsTo(1L));
+				BeanCriteriaConverter.convert(p(PERSON.id).equalsTo(1L));
 		assertThat(criteria, is(QueryFilter.class));
 		@SuppressWarnings("unchecked")
 		QueryFilter<Long> filter = (QueryFilter<Long>) criteria;
@@ -55,7 +55,7 @@ public class BeanCriteriaConverterTest {
 	public void testBeanCriteriaConverter_FilterCase002() {
 		PersonMeta PERSON = PersonMeta.get();
 		QueryFilterCriteria criteria = 
-				BeanCriteriaConverter.convert(property(PERSON.id).lessEqual(1L));
+				BeanCriteriaConverter.convert(p(PERSON.id).lessEqual(1L));
 		assertThat(criteria, is(QueryFilter.class));
 		@SuppressWarnings("unchecked")
 		QueryFilter<Long> filter = (QueryFilter<Long>) criteria;
@@ -67,7 +67,7 @@ public class BeanCriteriaConverterTest {
 	public void testBeanCriteriaConverter_FilterCase003() {
 		PersonMeta PERSON = PersonMeta.get();
 		QueryFilterCriteria criteria = 
-				BeanCriteriaConverter.convert(property(PERSON.id).in(1L,2L));
+				BeanCriteriaConverter.convert(p(PERSON.id).in(1L,2L));
 		assertThat(criteria, is(QueryFilter.class));
 		@SuppressWarnings("unchecked")
 		QueryFilter<Long> filter = (QueryFilter<Long>) criteria;
@@ -82,8 +82,8 @@ public class BeanCriteriaConverterTest {
 		PersonMeta PERSON = PersonMeta.get();
 		BeanFilterComposite composite = 
 				and(
-					property(PERSON.id).in(1L,2L),
-					property(PERSON.name).equalsTo("hogehoge")
+					p(PERSON.id).in(1L,2L),
+					p(PERSON.name).equalsTo("hogehoge")
 				);
 		QueryFilterCriteria criteria = BeanCriteriaConverter.convert(composite);
 		assertThat(criteria, is(QueryFilterComposite.class));

@@ -6,12 +6,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tkym.labs.beancache.BeancacheQuery.BeancacheQueryBuilder;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 
 public class Beancache<BT,KT extends Comparable<KT>> implements Map<Key<BT, KT>, BT>{
 	private final BeanMeta<BT, KT> beanMeta;
 	private final Map<Key<BT, KT>, BT> delegate;
+	private final BeancacheQueryBuilder<BT, KT> queryBuilder;
 	Beancache(BeanMeta<BT, KT> beanMeta){
 		this(beanMeta, new ConcurrentHashMap<Key<BT, KT>, BT>());
 	}
@@ -21,15 +23,19 @@ public class Beancache<BT,KT extends Comparable<KT>> implements Map<Key<BT, KT>,
 	Beancache(BeanMeta<BT, KT> beanMeta, Map<Key<BT, KT>, BT> delegate){
 		this.beanMeta = beanMeta;
 		this.delegate = delegate;
+		this.queryBuilder = new BeancacheQueryBuilder<BT, KT>(this.delegate, this.beanMeta);
+	}
+	public BeancacheQuery<BT,KT> queryFor(Set<Key<BT, KT>> source){
+		return this.queryBuilder.build(source);
 	}
 	public BeancacheQuery<BT,KT> queryFor(Key<?, ?> parent){
 		HashSet<Key<BT, KT>> target = new HashSet<Key<BT,KT>>();
 		for (Key<BT, KT> key : delegate.keySet())
 			if (parent.isAncestorOf(key)) target.add(key);
-		return new BeancacheQuery<BT,KT>(beanMeta, delegate, target);
+		return this.queryBuilder.build(target);
 	}
 	public BeancacheQuery<BT,KT> queryAll(){
-		return new BeancacheQuery<BT,KT>(beanMeta, delegate);
+		return this.queryBuilder.build();
 	}
 	@Override
 	public int size() {

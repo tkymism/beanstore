@@ -10,7 +10,7 @@ public class BeanQueryUtils {
 	public static BeanFilterComposite or(BeanFilterCriteria... criteria){
 		return new BeanFilterComposite(BeanFilterCompositeType.OR, criteria);
 	}
-	public static <BT,PT> BeanCriteriaBuilder<BT,PT> property(PropertyMeta<BT, PT> meta){
+	public static <BT,PT> BeanCriteriaBuilder<BT,PT> p(PropertyMeta<BT, PT> meta){
 		return new BeanCriteriaBuilder<BT, PT>(meta);
 	}
 }

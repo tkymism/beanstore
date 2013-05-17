@@ -2,12 +2,13 @@ package com.tkym.labs.beancache;
 
 import java.util.Set;
 
+import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 
-abstract class AbstractBeancacheIndex<BT,KT extends Comparable<KT>, PT extends Comparable<PT>> implements BeancacheIndex<BT,KT,PT>{
-	protected final BeancacheIndexMap<PT, BT, KT> index;
-	AbstractBeancacheIndex(){
-		this.index = new BeancacheIndexMap<PT, BT, KT>();
+abstract class AbstractBeancacheFilter<BT,KT extends Comparable<KT>, PT extends Comparable<PT>> implements BeancacheFilter<BT,KT,PT>{
+	protected final BeancacheFilterMap<PT, BT, KT> index;
+	AbstractBeancacheFilter(BeanMeta<BT, KT> beanMeta){
+		this.index = new BeancacheFilterMap<PT, BT, KT>(beanMeta);
 	}
 	@Override
 	public Set<Key<BT,KT>> tail(PT from, boolean inclusive){
@@ -42,7 +43,21 @@ abstract class AbstractBeancacheIndex<BT,KT extends Comparable<KT>, PT extends C
 		return index.equalsTo(p);
 	}
 	@Override
-	public Set<Key<BT, KT>> match(BeancacheIndexMatcher<PT> matcher) {
+	public Set<Key<BT, KT>> match(BeancacheFilterMatcher<PT> matcher) {
 		return index.match(matcher);
+	}
+	@Override
+	public BeancacheFilter<BT, KT, PT> asc() {
+		index.asc();
+		return this;
+	}
+	@Override
+	public BeancacheFilter<BT, KT, PT> desc() {
+		index.desc();
+		return this;
+	}
+	@Override
+	public Set<Key<BT, KT>> all() {
+		return index.all();
 	}
 }

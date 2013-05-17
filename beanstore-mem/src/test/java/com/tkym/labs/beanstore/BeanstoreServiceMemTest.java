@@ -1,5 +1,9 @@
 package com.tkym.labs.beanstore;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import com.tkym.labs.beancache.Beancache;
 import com.tkym.labs.beancache.BeancacheQuery;
 import com.tkym.labs.beancache.BeancacheRepository;
@@ -51,7 +55,6 @@ public class BeanstoreServiceMemTest {
 		}
 	}
 	class BeanQueryExecutor<BT,KT extends Comparable<KT>> extends AbstractBeanQueryExecutor<BT, KT>{
-		@SuppressWarnings("unused")
 		private final BeancacheQuery<BT, KT> beancacheQuery; 
 		BeanQueryExecutor(BeanMeta<BT, KT> beanMeta, Key<?, ?> parent, Beancache<BT, KT> beancache) {
 			super(beanMeta, parent);
@@ -62,13 +65,52 @@ public class BeanstoreServiceMemTest {
 		}
 		@Override
 		public QueryResultFetcher<BT> executeQueryAsBean(
-				BeanQuerySource<BT, KT> objects) throws Exception {
-			return null;
+				BeanQuerySource<BT, KT> source) throws Exception {
+			Set<Key<BT,KT>> keyset = 
+					BeanstoreServiceInterpreter.
+					target(beancacheQuery).
+					filterList(source.filterList());
+			return new QueryResultFetcherForBeancache<BT,KT>(beancacheQuery.sourceMap(), keyset);
 		}
 		@Override
 		public QueryResultFetcher<Key<BT, KT>> executeQueryAsKey(
 				BeanQuerySource<BT, KT> objects) throws Exception {
 			return null;
+		}
+	}
+	
+	
+	class QueryResultFetcherForBeancache<BT,KT extends Comparable<KT>> implements QueryResultFetcher<BT>{
+		private final Map<Key<BT, KT>, BT> map;
+		private final Set<Key<BT, KT>> result;
+		QueryResultFetcherForBeancache(Map<Key<BT, KT>, BT> map, Set<Key<BT, KT>> result){
+			this.map = map;
+			this.result = result;
+		}
+		@Override
+		public Iterator<BT> iterator() throws Exception {
+			final Iterator<Key<BT, KT>> ite = result.iterator();
+			return new Iterator<BT>() {
+				@Override
+				public boolean hasNext() {
+					return ite.hasNext();
+				}
+
+				@Override
+				public BT next() {
+					return map.get(ite.next());
+				}
+				@Override
+				public void remove() {
+					ite.remove();
+				}
+			};
+		}
+		@Override
+		public BT singleValue() throws Exception {
+			Iterator<Key<BT, KT>> ite = this.result.iterator();
+			if (ite.hasNext()) return map.get(ite.next());
+			else return null;
 		}
 	}
 	public class BeanstoreServiceFactoryMem implements BeanstoreServiceFactory{

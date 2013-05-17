@@ -11,7 +11,7 @@ public class DefaultBeanFilterBuilder<BT, KT, PT> implements BeanFilterBuilder<B
 	private final BeanCriteriaBuilder<BT, PT> builder;
 	public DefaultBeanFilterBuilder(BeanQuery<BT, KT> query, PropertyMeta<BT, PT> propertyMeta){
 		this.query = query;
-		builder = BeanQueryUtils.property(propertyMeta);
+		builder = BeanQueryUtils.p(propertyMeta);
 	}
 	@Override
 	public BeanQuery<BT, KT> equalsTo(PT value) {

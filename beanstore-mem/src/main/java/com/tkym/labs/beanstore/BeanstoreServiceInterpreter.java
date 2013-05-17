@@ -1,29 +1,48 @@
 package com.tkym.labs.beanstore;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
-import com.tkym.labs.beancache.BeancacheIndexMatcher;
+import com.tkym.labs.beancache.BeancacheFilterMatcher;
 import com.tkym.labs.beancache.BeancacheQuery;
 import com.tkym.labs.beanmeta.Key;
 import com.tkym.labs.beanstore.api.BeanFilter;
 import com.tkym.labs.beanstore.api.BeanFilterComposite;
 import com.tkym.labs.beanstore.api.BeanFilterCriteria;
+import com.tkym.labs.beanstore.api.BeanSort;
+import com.tkym.labs.beanstore.api.BeanSortCriteria;
 
-class BeancacheFilterProcesser<BT, KT extends Comparable<KT>>{
+class BeanstoreServiceInterpreter<BT, KT extends Comparable<KT>>{
 	private final BeancacheQuery<BT, KT> beancacheQuery;
-	BeancacheFilterProcesser(BeancacheQuery<BT, KT> beancacheQuery){
+	BeanstoreServiceInterpreter(BeancacheQuery<BT, KT> beancacheQuery){
 		this.beancacheQuery = beancacheQuery;
 	}
 	static <BT, KT extends Comparable<KT>> 
-		BeancacheFilterProcesser<BT, KT> target(BeancacheQuery<BT, KT> beancacheQuery){
-			return new BeancacheFilterProcesser<BT,KT>(beancacheQuery);
+		BeanstoreServiceInterpreter<BT, KT> target(BeancacheQuery<BT, KT> beancacheQuery){
+			return new BeanstoreServiceInterpreter<BT,KT>(beancacheQuery);
 		}
-	
+	Set<Key<BT, KT>> sort(BeanSortCriteria criteria){
+//		if (criteria instanceof BeanSort)
+			return null;
+	}
+	private <PT extends Comparable<PT>> Set<Key<BT, KT>> processSort(BeanSort<BT, PT> sort){
+		switch(sort.getOperator()){
+		case ASCENDING :
+		case DESCENDING :
+		default :
+			throw new IllegalArgumentException("unsupport operator type:"+sort.getOperator());
+		}
+	}
+	Set<Key<BT,KT>> filterList(List<BeanFilterCriteria> list){
+		BeanFilterCriteria[] array = new BeanFilterCriteria[list.size()];
+		list.toArray(array);
+		return this.compositeAsAnd(array);
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" }) 
-	Set<Key<BT,KT>> criteria(BeanFilterCriteria criteria){
+	Set<Key<BT,KT>> filter(BeanFilterCriteria criteria){
 		if (criteria instanceof BeanFilter){
-			return filter((BeanFilter) criteria);
+			return processFilter((BeanFilter) criteria);
 		}else if (criteria instanceof BeanFilterComposite){
 			return composite((BeanFilterComposite) criteria);
 		}else{
@@ -41,19 +60,19 @@ class BeancacheFilterProcesser<BT, KT extends Comparable<KT>>{
 	private Set<Key<BT,KT>> compositeAsOr(BeanFilterCriteria... criteriaList){
 		Set<Key<BT,KT>> set = new LinkedHashSet<Key<BT,KT>>();
 		for (BeanFilterCriteria criteria : criteriaList)
-			set.addAll(criteria(criteria));
+			set.addAll(filter(criteria));
 		return set;
 	}
 	private Set<Key<BT,KT>> compositeAsAnd(BeanFilterCriteria... criteriaList){
 		Set<Key<BT,KT>> set = null;
 		for (BeanFilterCriteria criteria : criteriaList)
 			if (set == null) 
-				set = new LinkedHashSet<Key<BT,KT>>(criteria(criteria));
+				set = new LinkedHashSet<Key<BT,KT>>(filter(criteria));
 			else 
-				set.retainAll(criteria(criteria));
+				set.retainAll(filter(criteria));
 		return set;
 	}
-	<PT extends Comparable<PT>> Set<Key<BT,KT>> filter(BeanFilter<BT, PT> filter){
+	<PT extends Comparable<PT>> Set<Key<BT,KT>> processFilter(BeanFilter<BT, PT> filter){
 		switch(filter.getOperator()){
 		case EQUAL: 				return equalTo(filter);
 		case NOT_EQUAL:				return notEqual(filter);
@@ -89,26 +108,24 @@ class BeancacheFilterProcesser<BT, KT extends Comparable<KT>>{
 		return beancacheQuery.property(filter.getMeta()).equalsTo(filter.value());
 	}
 	private <PT extends Comparable<PT>> Set<Key<BT,KT>> notEqual(BeanFilter<BT, PT> filter){
-		Set<Key<BT, KT>> def = new LinkedHashSet<Key<BT,KT>>(beancacheQuery.asKeySet());
-		def.removeAll(beancacheQuery.property(filter.getMeta()).equalsTo(filter.value()));
-		return def;
+		return beancacheQuery.defferent(beancacheQuery.property(filter.getMeta()).equalsTo(filter.value()));
 	}
 	private <PT extends Comparable<PT>> Set<Key<BT,KT>> in(BeanFilter<BT, PT> filter){
-		Set<Key<BT, KT>> union = new LinkedHashSet<Key<BT,KT>>();
+		Set<Key<BT,KT>> ret = new LinkedHashSet<Key<BT,KT>>();
 		for (PT p : filter.getValues()) 
-			union.addAll(beancacheQuery.property(filter.getMeta()).equalsTo(p));
-		return union;
+			ret.addAll(beancacheQuery.property(filter.getMeta()).equalsTo(p));
+		return ret;
 	}
 	private Set<Key<BT,KT>> startWith(BeanFilter<BT, String> filter){
 		return beancacheQuery.property(filter.getMeta()).match(
-				BeancacheIndexMatcher.Matchers.startWith(filter.value()));
+				BeancacheFilterMatcher.Matchers.startWith(filter.value()));
 	}
 	private Set<Key<BT,KT>> endWith(BeanFilter<BT, String> filter){
 		return beancacheQuery.property(filter.getMeta()).match(
-				BeancacheIndexMatcher.Matchers.endWith(filter.value()));
+				BeancacheFilterMatcher.Matchers.endWith(filter.value()));
 	}
 	private Set<Key<BT,KT>> contain(BeanFilter<BT, String> filter){
 		return beancacheQuery.property(filter.getMeta()).match(
-				BeancacheIndexMatcher.Matchers.contain(filter.value()));
+				BeancacheFilterMatcher.Matchers.contain(filter.value()));
 	}
 }

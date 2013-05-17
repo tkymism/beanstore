@@ -1,10 +1,10 @@
 package com.tkym.labs.beancache;
 
-public interface BeancacheIndexMatcher<P> {
+public interface BeancacheFilterMatcher<P> {
 	boolean match(P index);
 	public static class Matchers{
-		public static BeancacheIndexMatcher<String> contain(final String str){
-			return new BeancacheIndexMatcher<String>(){
+		public static BeancacheFilterMatcher<String> contain(final String str){
+			return new BeancacheFilterMatcher<String>(){
 				@Override
 				public boolean match(String index) {
 					if (index == null) return false;
@@ -14,8 +14,8 @@ public interface BeancacheIndexMatcher<P> {
 				}
 			};
 		}
-		public static BeancacheIndexMatcher<String> endWith(final String str){
-			return new BeancacheIndexMatcher<String>(){
+		public static BeancacheFilterMatcher<String> endWith(final String str){
+			return new BeancacheFilterMatcher<String>(){
 				@Override
 				public boolean match(String index) {
 					if (index == null) return false;
@@ -23,8 +23,8 @@ public interface BeancacheIndexMatcher<P> {
 				}
 			};
 		}
-		public static BeancacheIndexMatcher<String> startWith(final String str){
-			return new BeancacheIndexMatcher<String>(){
+		public static BeancacheFilterMatcher<String> startWith(final String str){
+			return new BeancacheFilterMatcher<String>(){
 				@Override
 				public boolean match(String index) {
 					if (index == null) return false;

@@ -3,10 +3,11 @@ package com.tkym.labs.beancache;
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.Key;
 
-public class BeancacheKeyIndex<BT,KT extends Comparable<KT>, PBT, PKT extends Comparable<PKT>>
-	extends AbstractBeancacheIndex<BT,KT,PKT>{
+public class BeancacheKeyFilter<BT,KT extends Comparable<KT>, PBT, PKT extends Comparable<PKT>>
+	extends AbstractBeancacheFilter<BT,KT,PKT>{
 	private final int count;
-	BeancacheKeyIndex(BeanMeta<BT,KT> current, BeanMeta<PBT, PKT> parent){
+	BeancacheKeyFilter(BeanMeta<BT,KT> current, BeanMeta<PBT, PKT> parent){
+		super(current);
 		this.count = countRank(current, parent);
 		if (this.count < 0)
 			throw new IllegalArgumentException(

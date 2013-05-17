@@ -10,7 +10,7 @@ public class DefaultBeanSortBuilder<BT, KT, PT> implements BeanSortBuilder<BT, K
 	private final BeanQuery<BT, KT> query;
 	private final BeanCriteriaBuilder<BT, PT> builder;
 	DefaultBeanSortBuilder(BeanQuery<BT, KT> query, PropertyMeta<BT, PT> propertyMeta){
-		builder = BeanQueryUtils.property(propertyMeta);
+		builder = BeanQueryUtils.p(propertyMeta);
 		this.query = query;
 	}
 	@Override

@@ -1,5 +1,5 @@
 package com.tkym.labs.beanstore.api;
-import static com.tkym.labs.beanstore.api.BeanQueryUtils.property;
+import static com.tkym.labs.beanstore.api.BeanQueryUtils.p;
 
 import com.tkym.labs.beanmeta.BeanMeta;
 import com.tkym.labs.beanmeta.PropertyMeta;
@@ -38,10 +38,10 @@ public class BeanQueryBuilder<BT,KT> {
 			this.propertyMeta = propertyMeta;
 		}
 		public BeanQueryBuilder<BT,KT> asc(){
-			return this.builder.sort(property(propertyMeta).asc());
+			return this.builder.sort(p(propertyMeta).asc());
 		}
 		public BeanQueryBuilder<BT,KT> desc(){
-			return this.builder.sort(property(propertyMeta).desc());
+			return this.builder.sort(p(propertyMeta).desc());
 		}
 	}
 	public static class BeanFilterBuildHelper<BT,KT,PT>{
@@ -52,34 +52,34 @@ public class BeanQueryBuilder<BT,KT> {
 			this.propertyMeta = propertyMeta;
 		}
 		public BeanQueryBuilder<BT,KT> equalsTo(PT value){
-			return builder.filter(property(propertyMeta).equalsTo(value));
+			return builder.filter(p(propertyMeta).equalsTo(value));
 		}
 		public BeanQueryBuilder<BT,KT> greaterThan(PT value){
-			return builder.filter(property(propertyMeta).greaterThan(value));
+			return builder.filter(p(propertyMeta).greaterThan(value));
 		}
 		public BeanQueryBuilder<BT,KT> greaterEqual(PT value){
-			return builder.filter(property(propertyMeta).greaterEqual(value));
+			return builder.filter(p(propertyMeta).greaterEqual(value));
 		}
 		public BeanQueryBuilder<BT,KT> lessThan(PT value){
-			return builder.filter(property(propertyMeta).lessThan(value));
+			return builder.filter(p(propertyMeta).lessThan(value));
 		}
 		public BeanQueryBuilder<BT,KT> lessEqual(PT value){
-			return builder.filter(property(propertyMeta).lessEqual(value));
+			return builder.filter(p(propertyMeta).lessEqual(value));
 		}
 		public BeanQueryBuilder<BT,KT> notEquals(PT value){
-			return builder.filter(property(propertyMeta).notEquals(value));
+			return builder.filter(p(propertyMeta).notEquals(value));
 		}
 		public BeanQueryBuilder<BT,KT> in(PT... value){
-			return builder.filter(property(propertyMeta).in(value));
+			return builder.filter(p(propertyMeta).in(value));
 		}
 		public BeanQueryBuilder<BT,KT> startsWith(PT value){
-			return builder.filter(property(propertyMeta).startsWith(value));
+			return builder.filter(p(propertyMeta).startsWith(value));
 		}
 		public BeanQueryBuilder<BT,KT> endsWith(PT value){
-			return builder.filter(property(propertyMeta).endsWith(value));
+			return builder.filter(p(propertyMeta).endsWith(value));
 		}
 		public BeanQueryBuilder<BT,KT> contains(PT value){
-			return builder.filter(property(propertyMeta).contains(value));
+			return builder.filter(p(propertyMeta).contains(value));
 		}
 	}
 }
