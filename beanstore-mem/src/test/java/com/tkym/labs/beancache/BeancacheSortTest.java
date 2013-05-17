@@ -23,12 +23,16 @@ public class BeancacheSortTest {
 	}
 	class BeancacheSort<BT, KT extends Comparable<KT>>{
 		private final Key<BT, KT> key;
-		BeancacheSort(Key<BT, KT> key){
+		private final Comparable<?>[] c;
+		BeancacheSort(Key<BT, KT> key, Comparable<?>... c){
 			this.key = key;
+			this.c = c;
 		}
 	}
+	
 	@Test
 	public void testSortCase001(){
+		
 		BeancacheFilterMap<Integer, Hoge, String> idx1 
 			= new BeancacheFilterMap<Integer, Hoge, String>(HOGE);
 		Key<Hoge, String> a = key("a"); 
