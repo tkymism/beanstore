@@ -29,9 +29,11 @@ class BeanstoreServiceInterpreter<BT, KT extends Comparable<KT>>{
 	private <PT extends Comparable<PT>> Set<Key<BT, KT>> processSort(BeanSort<BT, PT> sort){
 		switch(sort.getOperator()){
 		case ASCENDING :
+			
 		case DESCENDING :
+			
 		default :
-			throw new IllegalArgumentException("unsupport operator type:"+sort.getOperator());
+			throw new IllegalArgumentException("Unsupport operator type:"+sort.getOperator());
 		}
 	}
 	Set<Key<BT,KT>> filterList(List<BeanFilterCriteria> list){
