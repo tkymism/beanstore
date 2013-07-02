@@ -17,6 +17,7 @@ import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -97,8 +98,6 @@ public class HBaseTest {
         KeyValue kv2 = v2.get(0);
         assertThat(new String(kv2.getValue()), is("insert21"));
         
-        
-        
         hTable.close();
 	}
 	
@@ -110,6 +109,11 @@ public class HBaseTest {
 			super(t);
 		}
 	}
+	static class BeanstoreHBaseAdminProvider{
+		private static BeanstoreHBaseAdminProvider singleton = 
+				new BeanstoreHBaseAdminProvider();
+	}
+	
 	class BeanstoreHBaseAdmin{
 		private final HBaseAdmin admin;
 		BeanstoreHBaseAdmin(HBaseAdmin admin){
@@ -136,6 +140,7 @@ public class HBaseTest {
 			return desc;
 		}
 	}
+	
 	class BeanMetaHbase<BT, KT extends Comparable<KT>>{
 		private final HTable htable;
 		private final BeanMeta<BT, KT> beanmeta;
@@ -144,6 +149,7 @@ public class HBaseTest {
 			this.beanmeta = beanmeta;
 		}
 	}
+	
 	class BeanstoreRootServiceHBase extends AbstractBeanstoreRootService{
 		@Override
 		public BeanstoreTransaction transaction() {
@@ -162,6 +168,14 @@ public class HBaseTest {
 			return null;
 		}
 	}
+	
+	class HBaseRowFactory{
+		
+		<BT, KT> byte[] create(Key<BT, KT> key){
+			return null;
+		}
+	}
+	
 	class BeanstoreHBase<BT, KT extends  Comparable<KT>> extends AbstractBeanstore<BT, KT>{
 		protected BeanstoreHBase(AbstractBeanstoreRootService rootService, BeanMeta<BT, KT> beanMeta, Key<?, ?> parent) {
 			super(rootService, beanMeta, parent);
