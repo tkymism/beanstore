@@ -1,19 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<artifactId>beanstore-sample</artifactId>
 	<packaging>jar</packaging>
-
 	<name>beanstore-sample</name>
-	<url>http://maven.apache.org</url>
-
 	<parent>
-		<groupId>com.tkym.labs</groupId>
+		<groupId>com.tkym.labs.beanstore</groupId>
 		<artifactId>beanstore-pom</artifactId>
-		<version>1.0</version>
+		<version>0.1</version>
+		<relativePath>../beanstore-pom</relativePath>
 	</parent>
-
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
@@ -54,83 +50,28 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											com.mysema.maven
-										</groupId>
-										<artifactId>
-											maven-apt-plugin
-										</artifactId>
-										<versionRange>
-											[1.0.2,)
-										</versionRange>
-										<goals>
-											<goal>process</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											build-helper-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.7,)
-										</versionRange>
-										<goals>
-											<goal>add-source</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>com.tkym.labs</groupId>
+			<groupId>com.tkym.labs.beanmeta</groupId>
 			<artifactId>beanmeta-gen</artifactId>
-			<version>1.0</version>
+			<version>${beanmeta.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.tkym.labs</groupId>
+			<groupId>com.tkym.labs.beanmeta</groupId>
 			<artifactId>beanmeta-util</artifactId>
-			<version>1.0</version>
+			<version>${beanmeta.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.tkym.labs</groupId>
+			<groupId>${project.groupId}</groupId>
+			<version>${project.version}</version>
 			<artifactId>beanstore-rec</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.tkym.labs</groupId>
+			<groupId>com.tkym.labs.recordstore</groupId>
 			<artifactId>recordstore-sqlite</artifactId>
-			<version>1.0</version>
+			<version>${recordstore.version}</version>
 		</dependency>
 	</dependencies>
 </project>

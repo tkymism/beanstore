@@ -69,6 +69,7 @@ public class BeanQueryBuilder<BT,KT> {
 		public BeanQueryBuilder<BT,KT> notEquals(PT value){
 			return builder.filter(p(propertyMeta).notEquals(value));
 		}
+		@SuppressWarnings("unchecked") 
 		public BeanQueryBuilder<BT,KT> in(PT... value){
 			return builder.filter(p(propertyMeta).in(value));
 		}

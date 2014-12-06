@@ -12,7 +12,8 @@
 	<parent>
 		<groupId>com.tkym.labs</groupId>
 		<artifactId>beanstore-pom</artifactId>
-		<version>1.0</version>
+		<version>0.1</version>
+        <relativePath>0.1</relativePath>
 	</parent>
     <dependencies>
         <!-- Compile/runtime dependencies -->

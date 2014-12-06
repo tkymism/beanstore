@@ -18,6 +18,7 @@ public class BeanFilter<BT,PT> implements BeanFilterCriteria{
 	private final PropertyMeta<BT, PT> meta;
 	private final PT[] values;
 	private final BeanFilterOperator operator;
+	@SuppressWarnings("unchecked") 
 	BeanFilter(PropertyMeta<BT, PT> meta, BeanFilterOperator operator, PT... values) {
 		this.meta = meta;
 		this.values = values;

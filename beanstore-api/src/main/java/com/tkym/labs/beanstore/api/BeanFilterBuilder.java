@@ -8,6 +8,7 @@ public interface BeanFilterBuilder<BT,KT,PT> {
 	public BeanQuery<BT,KT> lessThan(PT value);
 	public BeanQuery<BT,KT> lessEqual(PT value);
 	public BeanQuery<BT,KT> notEquals(PT value);
+	@SuppressWarnings("unchecked") 
 	public BeanQuery<BT,KT> in(PT... value);
 	public BeanQuery<BT,KT> startsWith(PT value);
 	public BeanQuery<BT,KT> endsWith(PT value);

@@ -29,6 +29,7 @@ public class BeanCriteriaBuilder<BT,PT> {
 	public BeanFilter<BT,PT> notEquals(PT value){
 		return filter(BeanFilterOperator.NOT_EQUAL, value);
 	}
+	@SuppressWarnings("unchecked") 
 	public BeanFilter<BT,PT> in(PT... value){
 		return new BeanFilter<BT, PT>(meta, BeanFilterOperator.IN, value);
 	}

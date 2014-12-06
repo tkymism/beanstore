@@ -38,6 +38,7 @@ public class DefaultBeanFilterBuilder<BT, KT, PT> implements BeanFilterBuilder<B
 		return query.filter(builder.notEquals(value));
 	}
 	@Override
+	@SuppressWarnings("unchecked") 
 	public BeanQuery<BT, KT> in(PT... value) {
 		return query.filter(builder.in(value));
 	}

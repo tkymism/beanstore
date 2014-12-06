@@ -2,42 +2,44 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>beanstore-gae</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>beanstore-gae</name>
-	<url>http://maven.apache.org</url>
-		<parent>
-		<groupId>com.tkym.labs</groupId>
+	<parent>
+		<groupId>com.tkym.labs.beanstore</groupId>
 		<artifactId>beanstore-pom</artifactId>
-		<version>1.0</version>
+		<version>0.1</version>
+		<relativePath>../beanstore-pom</relativePath>
 	</parent>
+	<properties>
+		<google.appengine.version>1.4.3</google.appengine.version>
+	</properties>	
 	<dependencies>
 		<dependency>
-			<groupId>com.tkym.labs</groupId>
+			<groupId>${project.groupId}</groupId>
+			<version>${project.version}</version>
 			<artifactId>beanstore-core</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>1.4.3</version>
+			<version>${google.appengine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-testing</artifactId>
-			<version>1.4.3</version>
+			<version>${google.appengine.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-stubs</artifactId>
-			<version>1.4.3</version>
+			<version>${google.appengine.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.tkym.labs</groupId>
+			<groupId>com.tkym.labs.beanmeta</groupId>
 			<artifactId>beanmeta-test</artifactId>
-			<version>1.0</version>
+			<version>${beanmeta.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
