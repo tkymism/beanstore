@@ -12,7 +12,6 @@
 		<module>beanstore-api</module>
 		<module>beanstore-core</module>
 		<module>beanstore-gae</module>
-		<module>beanstore-mem</module>
 		<module>beanstore-rec</module>
 		<module>beanstore-sample</module>
 	</modules>
