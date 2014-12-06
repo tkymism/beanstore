@@ -14,5 +14,6 @@
 		<module>beanstore-gae</module>
 		<module>beanstore-rec</module>
 		<module>beanstore-sample</module>
+		<module>beanstore-sample-gae</module>
 	</modules>
 </project>
